@@ -1,0 +1,18 @@
+/**
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ *
+ */
+ .ContentEditable__root {
+  --v-padding: 8px;
+  border: 0;
+  font-size: 15px;
+  display: block;
+  position: relative;
+  outline: 0;
+  padding: var(--v-padding) 28px;
+  min-height: calc(calc(100% - var(--add-paragraph-height, 0)) - calc(var(--v-padding) * 2));
+}
