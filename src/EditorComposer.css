@@ -275,11 +275,11 @@
    background-size: contain;
  }
  
- .typeahead-popover li:first-child {
+ .typeahead-popover div:first-child li {
    border-radius: 8px 8px 0px 0px;
  }
  
- .typeahead-popover li:last-child {
+ .typeahead-popover div:last-child li {
    border-radius: 0px 0px 8px 8px;
  }
  
