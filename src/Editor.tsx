@@ -6,95 +6,104 @@
  *
  */
 
-import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
-import { CheckListPlugin } from '@lexical/react/LexicalCheckListPlugin';
-import { ClearEditorPlugin } from '@lexical/react/LexicalClearEditorPlugin';
-import { HashtagPlugin } from '@lexical/react/LexicalHashtagPlugin';
-import LexicalClickableLinkPlugin from '@lexical/react/LexicalClickableLinkPlugin';
-import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
-import { ListPlugin } from '@lexical/react/LexicalListPlugin';
-import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
-import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
-import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
-import React, { ReactNode, useEffect, useState } from 'react';
-import { useRef } from 'react';
+import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
+import { CharacterLimitPlugin } from "@lexical/react/LexicalCharacterLimitPlugin";
+import { CheckListPlugin } from "@lexical/react/LexicalCheckListPlugin";
+import { ClearEditorPlugin } from "@lexical/react/LexicalClearEditorPlugin";
+import LexicalClickableLinkPlugin from "@lexical/react/LexicalClickableLinkPlugin";
+import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
+import { HashtagPlugin } from "@lexical/react/LexicalHashtagPlugin";
+import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
+import { HorizontalRulePlugin } from "@lexical/react/LexicalHorizontalRulePlugin";
+import { ListPlugin } from "@lexical/react/LexicalListPlugin";
+import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
+import { TabIndentationPlugin } from "@lexical/react/LexicalTabIndentationPlugin";
+import { TablePlugin } from "@lexical/react/LexicalTablePlugin";
+import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
+import React, { useEffect, useState } from "react";
+import { useRef } from "react";
 
-import { useSettings } from './context/SettingsContext';
-import { useSharedHistoryContext } from './context/SharedHistoryContext';
-import AutoLinkPlugin from './plugins/AutoLinkPlugin';
-import CodeHighlightPlugin from './plugins/CodeHighlightPlugin';
-import EmojisPlugin from './plugins/EmojisPlugin';
-import KeywordsPlugin from './plugins/KeywordsPlugin';
-import ListMaxIndentLevelPlugin from './plugins/ListMaxIndentLevelPlugin';
-import MarkdownShortcutPlugin from './plugins/MarkdownShortcutPlugin';
-import TabFocusPlugin from './plugins/TabFocusPlugin';
-import ContentEditable from './ui/ContentEditable';
-import Placeholder from './ui/Placeholder';
-import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import EditorContext from './context/EditorContext';
-import { LexicalEditor } from 'lexical';
-import { useTranslation } from 'react-i18next';
-import DragDropPaste from './plugins/DragDropPastePlugin';
+import TableCellNodes from "./nodes/TableCellNodes";
+import AutoEmbedPlugin from "./plugins/AutoEmbedPlugin";
+import AutoLinkPlugin from "./plugins/AutoLinkPlugin";
+import CodeHighlightPlugin from "./plugins/CodeHighlightPlugin";
+import CollapsiblePlugin from "./plugins/CollapsiblePlugin";
+import ComponentPickerPlugin from "./plugins/ComponentPickerPlugin";
+import ContextMenuPlugin from "./plugins/ContextMenuPlugin";
+import DragDropPaste from "./plugins/DragDropPastePlugin";
+import DraggableBlockPlugin from "./plugins/DraggableBlockPlugin";
+import EmojiPickerPlugin from "./plugins/EmojiPickerPlugin";
+import EmojisPlugin from "./plugins/EmojisPlugin";
+import EquationsPlugin from "./plugins/EquationsPlugin";
+import FloatingLinkEditorPlugin from "./plugins/FloatingLinkEditorPlugin";
+import FloatingTextFormatToolbarPlugin from "./plugins/FloatingTextFormatToolbarPlugin";
+import ImagesPlugin from "./plugins/ImagesPlugin";
+import InlineImagePlugin from "./plugins/InlineImagePlugin";
+import KeywordsPlugin from "./plugins/KeywordsPlugin";
+import { LayoutPlugin } from "./plugins/LayoutPlugin/LayoutPlugin";
+import LinkPlugin from "./plugins/LinkPlugin";
+import ListMaxIndentLevelPlugin from "./plugins/ListMaxIndentLevelPlugin";
+import MarkdownShortcutPlugin from "./plugins/MarkdownShortcutPlugin";
+import { MaxLengthPlugin } from "./plugins/MaxLengthPlugin";
+import PageBreakPlugin from "./plugins/PageBreakPlugin";
+import PollPlugin from "./plugins/PollPlugin";
+import TabFocusPlugin from "./plugins/TabFocusPlugin";
+import TableCellActionMenuPlugin from "./plugins/TableActionMenuPlugin";
+import TableCellResizer from "./plugins/TableCellResizer";
+import TableOfContentsPlugin from "./plugins/TableOfContentsPlugin";
+import { TablePlugin as NewTablePlugin } from "./plugins/TablePlugin";
+import ToolbarPlugin from "./plugins/ToolbarPlugin";
+import YouTubePlugin from "./plugins/YouTubePlugin";
+import PlaygroundEditorTheme from "./themes/PlaygroundEditorTheme";
+import ContentEditable from "./ui/ContentEditable";
+import Placeholder from "./ui/Placeholder";
+
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { LexicalEditor } from "lexical";
 
 // Capytale
-import DraggableBlockPlugin from './plugins/DraggableBlockPlugin';
-import MarkdownTooglePlugin from './plugins/MarkdownTooglePlugin';
-import FloatingTextFormatToolbarPlugin from './plugins/FloatingTextFormatToolbarPlugin';
-import FloatingLinkEditorPlugin from './plugins/FloatingLinkEditorPlugin';
-import {
-  $getSelection,
-  $createParagraphNode,
-  $getNearestNodeFromDOMNode,
-  $getRoot,
-} from 'lexical';
+import { $createParagraphNode, $getRoot } from "lexical";
 
 interface IEditorProps {
-  children?: ReactNode;
   hashtagsEnabled?: boolean;
   autoLinkEnabled?: boolean;
   draggableBlocksEnabled?: boolean;
   emojisEnabled?: boolean;
-  actionsEnabled?: boolean;
-  toogleMarkdownEnabled?: boolean;
   placeholder?: string;
   listMaxIndent?: number;
   isEditable?: boolean;
-  locale?: 'en' | 'fr' | 'ptBr' | 'ru' | null;
+  maxLength?: number;
+  characterLimit?: number;
+  showTableOfContents?: boolean;
+  useLexicalContextMenu?: boolean;
+  showToolbarReadOnly?: boolean;
   onChange?: (editorState: string, editorInstance?: LexicalEditor) => void;
 }
 
 const Editor = ({
-  children,
   hashtagsEnabled = false,
   autoLinkEnabled = false,
   draggableBlocksEnabled = false,
   emojisEnabled = false,
-  actionsEnabled = false,
-  toogleMarkdownEnabled = false,
   listMaxIndent = 7,
-  placeholder = '',
+  placeholder = "",
   isEditable = true,
-  locale = null,
+  maxLength = null,
+  characterLimit = null,
+  showTableOfContents = false,
+  useLexicalContextMenu = false,
+  showToolbarReadOnly = false,
   onChange,
 }: IEditorProps) => {
   const [editor] = useLexicalComposerContext();
   const [activeEditor, setActiveEditor] = useState(editor);
 
   const editorStateRef = useRef(null);
-  const { historyState } = useSharedHistoryContext();
-  const {
-    settings: { isRichText },
-  } = useSettings();
   const placeholderComponent = <Placeholder>{placeholder}</Placeholder>;
-
-  const { i18n } = useTranslation();
 
   useEffect(() => {
     editor.setEditable(isEditable);
-
-    if (locale) i18n.changeLanguage(locale);
-  }, []);
+  }, [isEditable]);
 
   const [floatingAnchorElem, setFloatingAnchorElem] =
     useState<HTMLDivElement | null>(null);
@@ -102,6 +111,16 @@ const Editor = ({
     if (_floatingAnchorElem !== null) {
       setFloatingAnchorElem(_floatingAnchorElem);
     }
+  };
+  const [isLinkEditMode, setIsLinkEditMode] = useState<boolean>(false);
+
+  const cellEditorConfig = {
+    namespace: "Capytale",
+    nodes: [...TableCellNodes],
+    onError: (error: Error) => {
+      throw error;
+    },
+    theme: PlaygroundEditorTheme,
   };
 
   const addEndParagraph = () => {
@@ -118,20 +137,24 @@ const Editor = ({
   };
 
   return (
-    <EditorContext.Provider
-      value={{ initialEditor: editor, activeEditor, setActiveEditor }}
-    >
-      {children}
+    <>
+      {(isEditable || showToolbarReadOnly) && (<ToolbarPlugin setIsLinkEditMode={setIsLinkEditMode} />)}
       <div className={`editor-container`}>
+        {maxLength && <MaxLengthPlugin maxLength={maxLength} />}
+        <DragDropPaste />
         <AutoFocusPlugin />
         <ClearEditorPlugin />
-        {hashtagsEnabled && <HashtagPlugin />}
+        <ComponentPickerPlugin />
+        {emojisEnabled && <EmojiPickerPlugin />}
+        <AutoEmbedPlugin />
+
         {emojisEnabled && <EmojisPlugin />}
+        {hashtagsEnabled && <HashtagPlugin />}
         <KeywordsPlugin />
-        <DragDropPaste />
         {autoLinkEnabled && <AutoLinkPlugin />}
 
         <>
+          <HistoryPlugin />
           <RichTextPlugin
             contentEditable={
               <div className="editor-scroller">
@@ -140,8 +163,10 @@ const Editor = ({
                   <div
                     className="editor-add-paragraph"
                     onClick={addEndParagraph}
-                    role='button'
-                  >+</div>
+                    role="button"
+                  >
+                    +
+                  </div>
                 </div>
               </div>
             }
@@ -159,22 +184,68 @@ const Editor = ({
           <ListPlugin />
           <CheckListPlugin />
           <ListMaxIndentLevelPlugin maxDepth={listMaxIndent} />
+          <TablePlugin hasCellMerge={true} hasCellBackgroundColor={true} />
+          <TableCellResizer />
+          <NewTablePlugin cellEditorConfig={cellEditorConfig}>
+            <AutoFocusPlugin />
+            <RichTextPlugin
+              contentEditable={
+                <ContentEditable className="TableNode__contentEditable" />
+              }
+              placeholder={null}
+              ErrorBoundary={LexicalErrorBoundary}
+            />
+            <HistoryPlugin />
+            <ImagesPlugin captionsEnabled={false} />
+            <LinkPlugin />
+            <LexicalClickableLinkPlugin />
+            <FloatingTextFormatToolbarPlugin />
+          </NewTablePlugin>
+          <ImagesPlugin />
+          <InlineImagePlugin />
           <LinkPlugin />
-          <LexicalClickableLinkPlugin />
+          {!isEditable && <LexicalClickableLinkPlugin />}
+          <PollPlugin />
+          <YouTubePlugin />
           {isEditable && <FloatingTextFormatToolbarPlugin />}
+          <HorizontalRulePlugin />
+          <EquationsPlugin />
           <TabFocusPlugin />
-          <FloatingLinkEditorPlugin />
-          {draggableBlocksEnabled && floatingAnchorElem && (
+          <TabIndentationPlugin />
+          <CollapsiblePlugin />
+          <PageBreakPlugin />
+          <LayoutPlugin />
+          {isEditable && (
+            <FloatingLinkEditorPlugin
+              isLinkEditMode={isLinkEditMode}
+              setIsLinkEditMode={setIsLinkEditMode}
+            />
+          )}
+          {draggableBlocksEnabled && floatingAnchorElem && isEditable && (
             <>
               <DraggableBlockPlugin anchorElem={floatingAnchorElem} />
+              <TableCellActionMenuPlugin
+                anchorElem={floatingAnchorElem}
+                cellMerge={true}
+              />
             </>
           )}
+          {characterLimit && (
+            <CharacterLimitPlugin
+              charset={"UTF-16"}
+              maxLength={characterLimit}
+            />
+          )}
+          {showTableOfContents && (
+            <div>
+              {" "}
+              <TableOfContentsPlugin />
+            </div>
+          )}
+          {useLexicalContextMenu && <ContextMenuPlugin />}
         </>
-
-        <HistoryPlugin externalHistoryState={historyState} />
-        {toogleMarkdownEnabled && <MarkdownTooglePlugin />}
       </div>
-    </EditorContext.Provider>
+    </>
   );
 };
 

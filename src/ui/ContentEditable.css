@@ -6,7 +6,7 @@
  *
  *
  */
- .ContentEditable__root {
+.ContentEditable__root {
   --v-padding: 8px;
   border: 0;
   font-size: 15px;

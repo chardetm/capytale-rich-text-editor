@@ -27,14 +27,11 @@
     "sourceMap": true,
     "rootDir": "./src",
     "baseUrl": ".",
-    "paths": {
-      "libdefs/*": ["src/libdefs/*"],
-      "i18next": ["node_modules/i18next/dist/cjs/i18next.js"]
-    },
+    "paths": {},
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "downlevelIteration": true,
   },
-  "include": ["src", "src/libInjectCss.ts"],
+  "include": ["src", "./src/declarations.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -1,13 +1,14 @@
+import React from "react";
+
 import {
   LexicalComposer,
   InitialEditorStateType,
-} from '@lexical/react/LexicalComposer';
-import React from 'react';
-import PlaygroundNodes from './nodes/PlaygroundNodes';
-import PlaygroundEditorTheme from './themes/PlaygroundEditorTheme';
-import './EditorComposer.css';
-import i18n from './locale';
-import { I18nextProvider } from 'react-i18next';
+} from "@lexical/react/LexicalComposer";
+import PlaygroundNodes from "./nodes/PlaygroundNodes";
+import PlaygroundEditorTheme from "./themes/PlaygroundEditorTheme";
+import { TableContext } from "./plugins/TablePlugin";
+
+import "./EditorComposer.css";
 
 interface IEditorComposer {
   children: React.ReactElement;
@@ -16,7 +17,7 @@ interface IEditorComposer {
 
 const EditorComposer = ({ children, initialEditorState }: IEditorComposer) => {
   const initialConfig = {
-    namespace: 'VerbumEditor',
+    namespace: "VerbumEditor",
     nodes: [...PlaygroundNodes],
     onError: (error) => {
       throw error;
@@ -26,9 +27,9 @@ const EditorComposer = ({ children, initialEditorState }: IEditorComposer) => {
   };
   return (
     <LexicalComposer initialConfig={initialConfig}>
-      <I18nextProvider i18n={i18n}>
+      <TableContext>
         <div className="editor-shell">{children}</div>
-      </I18nextProvider>
+      </TableContext>
     </LexicalComposer>
   );
 };

@@ -6,25 +6,32 @@
  *
  */
 
-import type { Klass, LexicalNode } from 'lexical';
+import type {Klass, LexicalNode} from 'lexical';
 
-import { CodeHighlightNode, CodeNode } from '@lexical/code';
-import { HashtagNode } from '@lexical/hashtag';
-import { AutoLinkNode, LinkNode } from '@lexical/link';
-import { ListItemNode, ListNode } from '@lexical/list';
-import { MarkNode } from '@lexical/mark';
-import { OverflowNode } from '@lexical/overflow';
-import { HorizontalRuleNode } from '@lexical/react/LexicalHorizontalRuleNode';
-import { HeadingNode, QuoteNode } from '@lexical/rich-text';
-import { TableCellNode, TableNode, TableRowNode } from '@lexical/table';
+import {CodeHighlightNode, CodeNode} from '@lexical/code';
+import {HashtagNode} from '@lexical/hashtag';
+import {AutoLinkNode, LinkNode} from '@lexical/link';
+import {ListItemNode, ListNode} from '@lexical/list';
+import {MarkNode} from '@lexical/mark';
+import {OverflowNode} from '@lexical/overflow';
+import {HorizontalRuleNode} from '@lexical/react/LexicalHorizontalRuleNode';
+import {HeadingNode, QuoteNode} from '@lexical/rich-text';
+import {TableCellNode, TableNode, TableRowNode} from '@lexical/table';
 
-import { EmojiNode } from './EmojiNode';
-import { EquationNode } from './EquationNode';
-import { ImageNode } from './ImageNode';
-import { KeywordNode } from './KeywordNode';
-import { PollNode } from './PollNode';
-import { TweetNode } from './TweetNode';
-import { YouTubeNode } from './YouTubeNode';
+import {CollapsibleContainerNode} from '../plugins/CollapsiblePlugin/CollapsibleContainerNode';
+import {CollapsibleContentNode} from '../plugins/CollapsiblePlugin/CollapsibleContentNode';
+import {CollapsibleTitleNode} from '../plugins/CollapsiblePlugin/CollapsibleTitleNode';
+import {EmojiNode} from './EmojiNode';
+import {EquationNode} from './EquationNode';
+import {ImageNode} from './ImageNode';
+import {InlineImageNode} from './InlineImageNode';
+import {KeywordNode} from './KeywordNode';
+import {LayoutContainerNode} from './LayoutContainerNode';
+import {LayoutItemNode} from './LayoutItemNode';
+import {PageBreakNode} from './PageBreakNode';
+import {PollNode} from './PollNode';
+import {TableNode as NewTableNode} from './TableNode';
+import {YouTubeNode} from './YouTubeNode';
 
 const PlaygroundNodes: Array<Klass<LexicalNode>> = [
   HeadingNode,
@@ -32,6 +39,7 @@ const PlaygroundNodes: Array<Klass<LexicalNode>> = [
   ListItemNode,
   QuoteNode,
   CodeNode,
+  NewTableNode,
   TableNode,
   TableCellNode,
   TableRowNode,
@@ -42,13 +50,19 @@ const PlaygroundNodes: Array<Klass<LexicalNode>> = [
   OverflowNode,
   PollNode,
   ImageNode,
+  InlineImageNode,
   EmojiNode,
   EquationNode,
   KeywordNode,
   HorizontalRuleNode,
-  TweetNode,
   YouTubeNode,
   MarkNode,
+  CollapsibleContainerNode,
+  CollapsibleContentNode,
+  CollapsibleTitleNode,
+  PageBreakNode,
+  LayoutContainerNode,
+  LayoutItemNode,
 ];
 
 export default PlaygroundNodes;

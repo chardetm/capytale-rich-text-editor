@@ -8,16 +8,13 @@
 
 import './KatexEquationAlterer.css';
 
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
 import * as React from 'react';
-import { useCallback, useState } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
+import {useCallback, useState} from 'react';
+import {ErrorBoundary} from 'react-error-boundary';
 
 import Button from '../ui/Button';
 import KatexRenderer from './KatexRenderer';
-
-// @ts-ignore
-import Mathfield from './MathField'
 
 type Props = {
   initialEquation?: string;
@@ -43,10 +40,10 @@ export default function KatexEquationAlterer({
   return (
     <>
       <div className="KatexEquationAlterer_defaultRow">
-        Pleine ligne
-        <input type="checkbox" checked={!inline} onChange={onCheckboxChange} />
+        Inline
+        <input type="checkbox" checked={inline} onChange={onCheckboxChange} />
       </div>
-      <div className="KatexEquationAlterer_defaultRow">Équation (LaTeX) </div>
+      <div className="KatexEquationAlterer_defaultRow">Equation </div>
       <div className="KatexEquationAlterer_centerRow">
         {inline ? (
           <input
@@ -66,10 +63,7 @@ export default function KatexEquationAlterer({
           />
         )}
       </div>
-      <div className="KatexEquationAlterer_centerRow">
-        <Mathfield />
-      </div>
-      <div className="KatexEquationAlterer_defaultRow">Prévisualisation </div>
+      <div className="KatexEquationAlterer_defaultRow">Visualization </div>
       <div className="KatexEquationAlterer_centerRow">
         <ErrorBoundary onError={(e) => editor._onError(e)} fallback={null}>
           <KatexRenderer
@@ -80,7 +74,7 @@ export default function KatexEquationAlterer({
         </ErrorBoundary>
       </div>
       <div className="KatexEquationAlterer_dialogActions">
-        <Button onClick={onClick}>Confirmer</Button>
+        <Button onClick={onClick}>Confirm</Button>
       </div>
     </>
   );
