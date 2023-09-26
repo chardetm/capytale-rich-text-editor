@@ -5,7 +5,7 @@ import Editor from "./Editor";
 import { InitialEditorStateType } from "@lexical/react/LexicalComposer";
 
 import { $generateNodesFromDOM } from "@lexical/html";
-import { $insertNodes, $getRoot } from "lexical";
+import { $insertNodes, $getRoot, EditorState } from "lexical";
 
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 
@@ -13,7 +13,7 @@ import "./CapytaleEditor.css";
 
 export interface ICapytaleEditorContentProps {
   isEditable?: boolean;
-  onChange?: (value: string) => void;
+  onChange?: (json: string, html: string) => void;
   htmlInitialContent?: string;
 }
 const CapytaleEditorContent: React.FC<ICapytaleEditorContentProps> = ({
@@ -41,8 +41,16 @@ const CapytaleEditorContent: React.FC<ICapytaleEditorContentProps> = ({
       <Editor
         draggableBlocksEnabled={true}
         hashtagsEnabled={true}
+        autoLinkEnabled={false}
+        emojisEnabled={false}
+        placeholder="Écrivez votre texte ici..."
         isEditable={isEditable}
-        onChange={onChange}
+        onChange={(editorState: EditorState, htmlOutput: string) => {
+          if (onChange) {
+            const json = JSON.stringify(editorState);
+            onChange(json, htmlOutput);
+          }
+        }}
       />
     </div>
   );
@@ -50,7 +58,7 @@ const CapytaleEditorContent: React.FC<ICapytaleEditorContentProps> = ({
 
 export interface ICapytaleEditorProps {
   isEditable?: boolean;
-  onChange?: (value: string) => void;
+  onChange?: (json: string, html: string) => void;
   initialEditorState?: InitialEditorStateType;
   htmlInitialContent?: string;
 }

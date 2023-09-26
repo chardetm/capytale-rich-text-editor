@@ -55,7 +55,8 @@ import ContentEditable from "./ui/ContentEditable";
 import Placeholder from "./ui/Placeholder";
 
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { LexicalEditor } from "lexical";
+import { EditorState, LexicalEditor } from "lexical";
+import { $generateHtmlFromNodes } from "@lexical/html";
 
 // Capytale
 import { $createParagraphNode, $getRoot } from "lexical";
@@ -73,7 +74,7 @@ interface IEditorProps {
   showTableOfContents?: boolean;
   useLexicalContextMenu?: boolean;
   showToolbarReadOnly?: boolean;
-  onChange?: (editorState: string, editorInstance?: LexicalEditor) => void;
+  onChange?: (editorState: EditorState, html?: string) => void;
 }
 
 const Editor = ({
@@ -169,9 +170,14 @@ const Editor = ({
             ErrorBoundary={LexicalErrorBoundary}
           />
           <OnChangePlugin
-            onChange={(editorState) => {
-              onChange?.(JSON.stringify(editorState), activeEditor);
-              return (editorStateRef.current = editorState);
+            ignoreSelectionChange
+            onChange={(editorState: EditorState, editor: LexicalEditor) => {
+                if (onChange) {
+                    editor.update(() => {
+                        const html = $generateHtmlFromNodes(editor);
+                        onChange(editorState, html);
+                    });
+                }
             }}
           />
           <MarkdownShortcutPlugin />
