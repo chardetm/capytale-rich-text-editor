@@ -14,11 +14,11 @@ import DropDown, {DropDownItem} from '../../ui/DropDown';
 import {INSERT_LAYOUT_COMMAND} from './LayoutPlugin';
 
 const LAYOUTS = [
-  {label: '2 columns (equal width)', value: '1fr 1fr'},
-  {label: '2 columns (25% - 75%)', value: '1fr 3fr'},
-  {label: '3 columns (equal width)', value: '1fr 1fr 1fr'},
-  {label: '3 columns (25% - 50% - 25%)', value: '1fr 2fr 1fr'},
-  {label: '4 columns (equal width)', value: '1fr 1fr 1fr 1fr'},
+  {label: '2 colonnes (même largeur)', value: '1fr 1fr'},
+  {label: '2 colonnes (25% - 75%)', value: '1fr 3fr'},
+  {label: '3 colonnes (même largeur)', value: '1fr 1fr 1fr'},
+  {label: '3 colonnes (25% - 50% - 25%)', value: '1fr 2fr 1fr'},
+  {label: '4 colonnes (même largeur)', value: '1fr 1fr 1fr 1fr'},
 ];
 
 export default function InsertLayoutDialog({
@@ -50,7 +50,7 @@ export default function InsertLayoutDialog({
           </DropDownItem>
         ))}
       </DropDown>
-      <Button onClick={onClick}>Insert</Button>
+      <Button onClick={onClick}>Insérer</Button>
     </>
   );
 }

@@ -39,6 +39,7 @@
   margin: 0px;
   padding-bottom: 10px;
   border-bottom: 1px solid #ccc;
+  font-family: Arial, Helvetica, sans-serif;
 }
 .Modal__closeButton {
   border: 0px;

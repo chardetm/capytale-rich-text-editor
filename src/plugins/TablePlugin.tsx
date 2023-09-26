@@ -172,16 +172,16 @@ export function InsertNewTableDialog({
   return (
     <>
       <TextInput
-        placeholder={'# of rows (1-500)'}
-        label="Rows"
+        placeholder={'Nb. de lignes (1-500)'}
+        label="Lignes"
         onChange={setRows}
         value={rows}
         data-test-id="table-modal-rows"
         type="number"
       />
       <TextInput
-        placeholder={'# of columns (1-50)'}
-        label="Columns"
+        placeholder={'Nb. de colonnes (1-50)'}
+        label="Colonnes"
         onChange={setColumns}
         value={columns}
         data-test-id="table-modal-columns"
@@ -189,7 +189,7 @@ export function InsertNewTableDialog({
       />
       <DialogActions data-test-id="table-model-confirm-insert">
         <Button disabled={isDisabled} onClick={onClick}>
-          Confirm
+          Confirmer
         </Button>
       </DialogActions>
     </>

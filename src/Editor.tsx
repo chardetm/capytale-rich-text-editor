@@ -28,7 +28,6 @@ import AutoEmbedPlugin from "./plugins/AutoEmbedPlugin";
 import AutoLinkPlugin from "./plugins/AutoLinkPlugin";
 import CodeHighlightPlugin from "./plugins/CodeHighlightPlugin";
 import CollapsiblePlugin from "./plugins/CollapsiblePlugin";
-import ComponentPickerPlugin from "./plugins/ComponentPickerPlugin";
 import ContextMenuPlugin from "./plugins/ContextMenuPlugin";
 import DragDropPaste from "./plugins/DragDropPastePlugin";
 import DraggableBlockPlugin from "./plugins/DraggableBlockPlugin";
@@ -38,15 +37,12 @@ import EquationsPlugin from "./plugins/EquationsPlugin";
 import FloatingLinkEditorPlugin from "./plugins/FloatingLinkEditorPlugin";
 import FloatingTextFormatToolbarPlugin from "./plugins/FloatingTextFormatToolbarPlugin";
 import ImagesPlugin from "./plugins/ImagesPlugin";
-import InlineImagePlugin from "./plugins/InlineImagePlugin";
 import KeywordsPlugin from "./plugins/KeywordsPlugin";
 import { LayoutPlugin } from "./plugins/LayoutPlugin/LayoutPlugin";
 import LinkPlugin from "./plugins/LinkPlugin";
 import ListMaxIndentLevelPlugin from "./plugins/ListMaxIndentLevelPlugin";
 import MarkdownShortcutPlugin from "./plugins/MarkdownShortcutPlugin";
 import { MaxLengthPlugin } from "./plugins/MaxLengthPlugin";
-import PageBreakPlugin from "./plugins/PageBreakPlugin";
-import PollPlugin from "./plugins/PollPlugin";
 import TabFocusPlugin from "./plugins/TabFocusPlugin";
 import TableCellActionMenuPlugin from "./plugins/TableActionMenuPlugin";
 import TableCellResizer from "./plugins/TableCellResizer";
@@ -144,7 +140,6 @@ const Editor = ({
         <DragDropPaste />
         <AutoFocusPlugin />
         <ClearEditorPlugin />
-        <ComponentPickerPlugin />
         {emojisEnabled && <EmojiPickerPlugin />}
         <AutoEmbedPlugin />
 
@@ -202,10 +197,8 @@ const Editor = ({
             <FloatingTextFormatToolbarPlugin />
           </NewTablePlugin>
           <ImagesPlugin />
-          <InlineImagePlugin />
           <LinkPlugin />
           {!isEditable && <LexicalClickableLinkPlugin />}
-          <PollPlugin />
           <YouTubePlugin />
           {isEditable && <FloatingTextFormatToolbarPlugin />}
           <HorizontalRulePlugin />
@@ -213,7 +206,6 @@ const Editor = ({
           <TabFocusPlugin />
           <TabIndentationPlugin />
           <CollapsiblePlugin />
-          <PageBreakPlugin />
           <LayoutPlugin />
           {isEditable && (
             <FloatingLinkEditorPlugin

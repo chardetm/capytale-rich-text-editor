@@ -28,9 +28,6 @@ import {
 import {useEffect, useRef, useState} from 'react';
 import * as React from 'react';
 import {CAN_USE_DOM} from '../../lexical-shared/canUseDOM';
-
-import landscapeImage from '../../images/landscape.jpg';
-import yellowFlowerImage from '../../images/yellow-flower.jpg';
 import {
   $createImageNode,
   $isImageNode,
@@ -63,15 +60,15 @@ export function InsertImageUriDialogBody({
   return (
     <>
       <TextInput
-        label="Image URL"
-        placeholder="i.e. https://source.unsplash.com/random"
+        label="URL de l'image"
+        placeholder="ex : https://source.unsplash.com/random"
         onChange={setSrc}
         value={src}
         data-test-id="image-modal-url-input"
       />
       <TextInput
-        label="Alt Text"
-        placeholder="Random unsplash image"
+        label="Description"
+        placeholder="Description de l'image"
         onChange={setAltText}
         value={altText}
         data-test-id="image-modal-alt-text-input"
@@ -81,7 +78,7 @@ export function InsertImageUriDialogBody({
           data-test-id="image-modal-confirm-btn"
           disabled={isDisabled}
           onClick={() => onClick({altText, src})}>
-          Confirm
+          Confirmer
         </Button>
       </DialogActions>
     </>
@@ -114,14 +111,14 @@ export function InsertImageUploadedDialogBody({
   return (
     <>
       <FileInput
-        label="Image Upload"
+        label="Fichier"
         onChange={loadImage}
         accept="image/*"
         data-test-id="image-modal-file-upload"
       />
       <TextInput
-        label="Alt Text"
-        placeholder="Descriptive alternative text"
+        label="Description"
+        placeholder="Description de l'image"
         onChange={setAltText}
         value={altText}
         data-test-id="image-modal-alt-text-input"
@@ -131,7 +128,7 @@ export function InsertImageUploadedDialogBody({
           data-test-id="image-modal-file-upload-btn"
           disabled={isDisabled}
           onClick={() => onClick({altText, src})}>
-          Confirm
+          Confirmer
         </Button>
       </DialogActions>
     </>
@@ -169,32 +166,14 @@ export function InsertImageDialog({
       {!mode && (
         <DialogButtonsList>
           <Button
-            data-test-id="image-modal-option-sample"
-            onClick={() =>
-              onClick(
-                hasModifier.current
-                  ? {
-                      altText:
-                        'Daylight fir trees forest glacier green high ice landscape',
-                      src: landscapeImage,
-                    }
-                  : {
-                      altText: 'Yellow flower in tilt shift lens',
-                      src: yellowFlowerImage,
-                    },
-              )
-            }>
-            Sample
-          </Button>
-          <Button
             data-test-id="image-modal-option-url"
             onClick={() => setMode('url')}>
-            URL
+            URL (déjà en ligne)...
           </Button>
           <Button
             data-test-id="image-modal-option-file"
             onClick={() => setMode('file')}>
-            File
+            Envoyer une image...
           </Button>
         </DialogButtonsList>
       )}

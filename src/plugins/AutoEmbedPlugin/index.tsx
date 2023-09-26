@@ -43,7 +43,7 @@ interface PlaygroundEmbedConfig extends EmbedConfig {
 }
 
 export const YoutubeEmbedConfig: PlaygroundEmbedConfig = {
-  contentName: 'Youtube Video',
+  contentName: 'Vidéo YouTube',
 
   exampleUrl: 'https://www.youtube.com/watch?v=jNQXAC9IVRw',
 
@@ -208,7 +208,7 @@ export function AutoEmbedDialog({
           disabled={!embedResult}
           onClick={onClick}
           data-test-id={`${embedConfig.type}-embed-modal-submit-btn`}>
-          Embed
+          Intégrer
         </Button>
       </DialogActions>
     </div>

@@ -40,10 +40,10 @@ export default function KatexEquationAlterer({
   return (
     <>
       <div className="KatexEquationAlterer_defaultRow">
-        Inline
-        <input type="checkbox" checked={inline} onChange={onCheckboxChange} />
+        Pleine ligne
+        <input type="checkbox" checked={!inline} onChange={onCheckboxChange} />
       </div>
-      <div className="KatexEquationAlterer_defaultRow">Equation </div>
+      <div className="KatexEquationAlterer_defaultRow">Équation </div>
       <div className="KatexEquationAlterer_centerRow">
         {inline ? (
           <input
@@ -63,7 +63,7 @@ export default function KatexEquationAlterer({
           />
         )}
       </div>
-      <div className="KatexEquationAlterer_defaultRow">Visualization </div>
+      <div className="KatexEquationAlterer_defaultRow">Prévisualisation </div>
       <div className="KatexEquationAlterer_centerRow">
         <ErrorBoundary onError={(e) => editor._onError(e)} fallback={null}>
           <KatexRenderer
@@ -74,7 +74,7 @@ export default function KatexEquationAlterer({
         </ErrorBoundary>
       </div>
       <div className="KatexEquationAlterer_dialogActions">
-        <Button onClick={onClick}>Confirm</Button>
+        <Button onClick={onClick}>Confirmer</Button>
       </div>
     </>
   );

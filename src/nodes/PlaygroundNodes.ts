@@ -24,12 +24,9 @@ import {CollapsibleTitleNode} from '../plugins/CollapsiblePlugin/CollapsibleTitl
 import {EmojiNode} from './EmojiNode';
 import {EquationNode} from './EquationNode';
 import {ImageNode} from './ImageNode';
-import {InlineImageNode} from './InlineImageNode';
 import {KeywordNode} from './KeywordNode';
 import {LayoutContainerNode} from './LayoutContainerNode';
 import {LayoutItemNode} from './LayoutItemNode';
-import {PageBreakNode} from './PageBreakNode';
-import {PollNode} from './PollNode';
 import {TableNode as NewTableNode} from './TableNode';
 import {YouTubeNode} from './YouTubeNode';
 
@@ -48,9 +45,7 @@ const PlaygroundNodes: Array<Klass<LexicalNode>> = [
   AutoLinkNode,
   LinkNode,
   OverflowNode,
-  PollNode,
   ImageNode,
-  InlineImageNode,
   EmojiNode,
   EquationNode,
   KeywordNode,
@@ -60,7 +55,6 @@ const PlaygroundNodes: Array<Klass<LexicalNode>> = [
   CollapsibleContainerNode,
   CollapsibleContentNode,
   CollapsibleTitleNode,
-  PageBreakNode,
   LayoutContainerNode,
   LayoutItemNode,
 ];

@@ -390,6 +390,10 @@
    background-image: url(images/icons/font-family.svg);
  }
  
+ .icon.font-size {
+   background-image: url(images/icons/font-size.svg);
+ }
+ 
  .icon.bg-color {
    background-image: url(images/icons/bg-color.svg);
  }
@@ -705,7 +709,7 @@
  
  .dropdown .item.fontsize-item,
  .dropdown .item.fontsize-item .text {
-   min-width: unset;
+   min-width: 70px;
  }
  
  .dropdown .item .active {
@@ -757,11 +761,11 @@
    .dropdown-button-text {
      display: none !important;
    }
- 
+   /*
    .font-size .dropdown-button-text {
      display: flex !important;
    }
- 
+   */
    .code-language .dropdown-button-text {
      display: flex !important;
    }
