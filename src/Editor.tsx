@@ -60,6 +60,7 @@ import { $generateHtmlFromNodes } from "@lexical/html";
 
 // Capytale
 import { $createParagraphNode, $getRoot } from "lexical";
+import { useEditorContext } from "./contexts/EditorContext";
 
 interface IEditorProps {
   hashtagsEnabled?: boolean;
@@ -74,7 +75,7 @@ interface IEditorProps {
   showTableOfContents?: boolean;
   useLexicalContextMenu?: boolean;
   showToolbarReadOnly?: boolean;
-  onChange?: (editorState: EditorState, html?: string) => void;
+  onChange?: (editorState: EditorState) => void;
 }
 
 const Editor = ({
@@ -98,9 +99,26 @@ const Editor = ({
   const editorStateRef = useRef(null);
   const placeholderComponent = <Placeholder>{placeholder}</Placeholder>;
 
+  const editorContext = useEditorContext();
+  useEffect(() => {
+    if (editorContext.setGetState) {
+      editorContext.setGetState(() => {
+        return () => {
+          return new Promise((resolve, reject) => {
+            editor.update(() => {
+              const html = $generateHtmlFromNodes(editor);
+              const json = JSON.stringify(editor.getEditorState());
+              resolve({ html, json });
+            });
+          });
+        };
+      });
+    }
+  }, [editor]);
+
   useEffect(() => {
     editor.setEditable(isEditable);
-  }, [isEditable]);
+  }, [editor, isEditable]);
 
   const [floatingAnchorElem, setFloatingAnchorElem] =
     useState<HTMLDivElement | null>(null);
@@ -135,7 +153,9 @@ const Editor = ({
 
   return (
     <>
-      {(isEditable || showToolbarReadOnly) && (<ToolbarPlugin setIsLinkEditMode={setIsLinkEditMode} />)}
+      {(isEditable || showToolbarReadOnly) && (
+        <ToolbarPlugin setIsLinkEditMode={setIsLinkEditMode} />
+      )}
       <div className={`editor-container`}>
         {maxLength && <MaxLengthPlugin maxLength={maxLength} />}
         <DragDropPaste />
@@ -172,12 +192,9 @@ const Editor = ({
           <OnChangePlugin
             ignoreSelectionChange
             onChange={(editorState: EditorState, editor: LexicalEditor) => {
-                if (onChange) {
-                    editor.update(() => {
-                        const html = $generateHtmlFromNodes(editor);
-                        onChange(editorState, html);
-                    });
-                }
+              if (onChange) {
+                onChange(editorState);
+              }
             }}
           />
           <MarkdownShortcutPlugin />

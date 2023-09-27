@@ -13,7 +13,7 @@ import "./CapytaleEditor.css";
 
 export interface ICapytaleEditorContentProps {
   isEditable?: boolean;
-  onChange?: (json: string, html: string) => void;
+  onChange?: (json: string) => void;
   htmlInitialContent?: string;
 }
 const CapytaleEditorContent: React.FC<ICapytaleEditorContentProps> = ({
@@ -45,12 +45,14 @@ const CapytaleEditorContent: React.FC<ICapytaleEditorContentProps> = ({
         emojisEnabled={false}
         placeholder="Écrivez votre texte ici..."
         isEditable={isEditable}
-        onChange={(editorState: EditorState, htmlOutput: string) => {
-          if (onChange) {
-            const json = JSON.stringify(editorState);
-            onChange(json, htmlOutput);
-          }
-        }}
+        onChange={
+          !onChange
+            ? undefined
+            : (editorState: EditorState) => {
+                const json = JSON.stringify(editorState);
+                onChange(json);
+              }
+        }
       />
     </div>
   );
@@ -58,7 +60,7 @@ const CapytaleEditorContent: React.FC<ICapytaleEditorContentProps> = ({
 
 export interface ICapytaleEditorProps {
   isEditable?: boolean;
-  onChange?: (json: string, html: string) => void;
+  onChange?: (json: string) => void;
   initialEditorState?: InitialEditorStateType;
   htmlInitialContent?: string;
 }
