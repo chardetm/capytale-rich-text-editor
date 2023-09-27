@@ -63,11 +63,12 @@ export interface ICapytaleEditorProps {
   htmlInitialContent?: string;
 }
 
-const CapytaleEditor: React.FC<ICapytaleEditorProps> = ({
+const CapytaleEditor: React.FC<React.PropsWithChildren<ICapytaleEditorProps>> = ({
   isEditable = true,
   onChange,
   initialEditorState,
   htmlInitialContent,
+  children,
 }): React.ReactElement => {
   if (htmlInitialContent) {
     initialEditorState = null;
