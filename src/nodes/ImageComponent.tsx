@@ -349,7 +349,7 @@ import type {
                   }
                   placeholder={
                     <Placeholder className="ImageNode__placeholder">
-                      Enter a caption...
+                      Entrer une légende...
                     </Placeholder>
                   }
                   ErrorBoundary={LexicalErrorBoundary}

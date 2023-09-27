@@ -257,7 +257,7 @@ export default function ImageResizer({
           onClick={() => {
             setShowCaption(!showCaption);
           }}>
-          Add Caption
+          Ajouter une légende
         </button>
       )}
       <div
