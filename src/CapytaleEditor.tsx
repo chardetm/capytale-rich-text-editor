@@ -68,7 +68,7 @@ const CapytaleEditor: React.FC<ICapytaleEditorProps> = ({
   onChange,
   initialEditorState,
   htmlInitialContent,
-}) => {
+}): React.ReactElement => {
   if (htmlInitialContent) {
     initialEditorState = null;
   }
