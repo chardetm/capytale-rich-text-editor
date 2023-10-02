@@ -52,6 +52,15 @@ Modal__overlay *
   margin-bottom: 0;
 }
 
+.editor-inner h1,
+.editor-inner h2,
+.editor-inner h3,
+.editor-inner h4,
+.editor-inner h5,
+.editor-inner h6 {
+  line-height: 1.7 !important;
+}
+
 .color-picker-basic-color > button {
   padding: 0;
 }
