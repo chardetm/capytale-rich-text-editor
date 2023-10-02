@@ -30,7 +30,7 @@
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.editor-out-container *,
+.editor-inner *,
 .caprte-dropdown,
 .caprte-dropdown *,
 .floating-text-format-popup,
@@ -43,11 +43,15 @@ Modal__overlay *
   box-sizing: content-box;
 }
 
-.editor-out-container .block-controls .h1,
-.editor-out-container .block-controls .h2,
-.editor-out-container .block-controls .h3,
-.editor-out-container .block-controls .h4,
-.editor-out-container .block-controls .h5,
-.editor-out-container .block-controls .h6 {
+.editor-inner .block-controls .h1,
+.editor-inner .block-controls .h2,
+.editor-inner .block-controls .h3,
+.editor-inner .block-controls .h4,
+.editor-inner .block-controls .h5,
+.editor-inner .block-controls .h6 {
   margin-bottom: 0;
+}
+
+.color-picker-basic-color > button {
+  padding: 0;
 }
