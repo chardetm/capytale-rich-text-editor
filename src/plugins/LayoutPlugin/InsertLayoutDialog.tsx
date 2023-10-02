@@ -39,7 +39,7 @@ export default function InsertLayoutDialog({
   return (
     <>
       <DropDown
-        buttonClassName="toolbar-item dialog-dropdown"
+        buttonClassName="toolbar-item dialog-caprte-dropdown"
         buttonLabel={buttonLabel}>
         {LAYOUTS.map(({label, value}) => (
           <DropDownItem

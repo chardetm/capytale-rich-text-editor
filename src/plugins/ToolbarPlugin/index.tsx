@@ -170,7 +170,7 @@ const ELEMENT_FORMAT_OPTIONS: {
 };
 
 function dropDownActiveClass(active: boolean) {
-  if (active) return "active dropdown-item-active";
+  if (active) return "active caprte-dropdown-item-active";
   else return "";
 }
 
