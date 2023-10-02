@@ -29,3 +29,25 @@
   --add-paragraph-height: 16px;
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.editor-out-container *,
+.caprte-dropdown,
+.caprte-dropdown *,
+.floating-text-format-popup,
+.floating-text-format-popup *,
+.link-editor,
+.link-editor *,
+Modal__overlay,
+Modal__overlay *
+{
+  box-sizing: content-box;
+}
+
+.editor-out-container .block-controls .h1,
+.editor-out-container .block-controls .h2,
+.editor-out-container .block-controls .h3,
+.editor-out-container .block-controls .h4,
+.editor-out-container .block-controls .h5,
+.editor-out-container .block-controls .h6 {
+  margin-bottom: 0;
+}
