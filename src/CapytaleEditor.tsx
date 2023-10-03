@@ -13,12 +13,16 @@ import "./CapytaleEditor.css";
 
 export interface ICapytaleEditorContentProps {
   isEditable?: boolean;
-  onChange?: (json: string) => void;
+  useLexicalContextMenu?: boolean;
+  onChange?: () => void;
+  onJsonChange?: (json: string) => void;
   htmlInitialContent?: string;
 }
 const CapytaleEditorContent: React.FC<ICapytaleEditorContentProps> = ({
   isEditable,
+  useLexicalContextMenu,
   onChange,
+  onJsonChange,
   htmlInitialContent,
 }) => {
   const [initialized, setInitialized] = React.useState(false);
@@ -45,12 +49,18 @@ const CapytaleEditorContent: React.FC<ICapytaleEditorContentProps> = ({
         emojisEnabled={false}
         placeholder="Écrivez votre texte ici..."
         isEditable={isEditable}
+        useLexicalContextMenu={useLexicalContextMenu}
         onChange={
-          !onChange
+          !onChange && !onJsonChange
             ? undefined
             : (editorState: EditorState) => {
-                const json = JSON.stringify(editorState);
-                onChange(json);
+                if (onChange) {
+                  onChange();
+                }
+                if (onJsonChange) {
+                  const json = JSON.stringify(editorState);
+                  onJsonChange(json);
+                }
               }
         }
       />
@@ -60,14 +70,18 @@ const CapytaleEditorContent: React.FC<ICapytaleEditorContentProps> = ({
 
 export interface ICapytaleEditorProps {
   isEditable?: boolean;
-  onChange?: (json: string) => void;
+  useLexicalContextMenu?: boolean;
+  onChange?: () => void;
+  onJsonChange?: (json: string) => void;
   initialEditorState?: InitialEditorStateType;
   htmlInitialContent?: string;
 }
 
 const CapytaleEditor: React.FC<ICapytaleEditorProps> = ({
   isEditable = true,
+  useLexicalContextMenu = false,
   onChange,
+  onJsonChange,
   initialEditorState,
   htmlInitialContent,
 }): React.ReactElement => {
@@ -78,7 +92,9 @@ const CapytaleEditor: React.FC<ICapytaleEditorProps> = ({
     <EditorComposer initialEditorState={initialEditorState}>
       <CapytaleEditorContent
         onChange={onChange}
+        onJsonChange={onJsonChange}
         isEditable={isEditable}
+        useLexicalContextMenu={useLexicalContextMenu}
         htmlInitialContent={htmlInitialContent}
       />
     </EditorComposer>

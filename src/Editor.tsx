@@ -75,6 +75,7 @@ interface IEditorProps {
   showTableOfContents?: boolean;
   useLexicalContextMenu?: boolean;
   showToolbarReadOnly?: boolean;
+  onEditorStateChange?: (editorState: EditorState) => void;
   onChange?: (editorState: EditorState) => void;
 }
 
