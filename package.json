@@ -1,7 +1,7 @@
 {
-  "name": "capytale-rich-text-editor",
+  "name": "@capytale/capytale-rich-text-editor",
   "author": "Maverick Chardet",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "type": "module",
   "main": "dist/capytale-rich-text-editor.umd.cjs",
   "module": "dist/capytale-rich-text-editor.js",
@@ -17,6 +17,9 @@
     "dist",
     "src"
   ],
+  "publishConfig": {
+    "@capytale:registry": "https://gitlab.in.ac-paris.fr/api/v4/projects/95/packages/npm/"
+  },  
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
