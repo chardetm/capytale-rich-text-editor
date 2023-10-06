@@ -104,11 +104,13 @@ const Editor = ({
   useEffect(() => {
     if (editorContext.setGetState) {
       editorContext.setGetState(() => {
-        return () => {
+        return (needJson: boolean = true, needHtml: boolean = true) => {
           return new Promise((resolve, reject) => {
             editor.update(() => {
-              const html = $generateHtmlFromNodes(editor);
-              const json = JSON.stringify(editor.getEditorState());
+              const html = needHtml ? $generateHtmlFromNodes(editor) : null;
+              const json = needJson
+                ? JSON.stringify(editor.getEditorState())
+                : null;
               resolve({ html, json });
             });
           });

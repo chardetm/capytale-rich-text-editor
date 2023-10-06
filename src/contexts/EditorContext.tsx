@@ -1,11 +1,14 @@
 import * as React from "react";
 import { createContext, ReactNode, useContext, useState } from "react";
 
-type StateGetter = () => Promise<{ html: string; json: string }>;
+type StateGetter = (
+  needJson?: boolean,
+  needHtml?: boolean
+) => Promise<{ html: null|string; json: null|string }>;
 
 type ContextShape = {
   getState?: StateGetter;
-  setGetState?: (StringGetter) => void;
+  setGetState?: (f: () => StateGetter) => void;
 };
 
 const Context: React.Context<ContextShape> = createContext({
