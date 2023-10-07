@@ -1,6 +1,8 @@
 # Capytale rich text editor
 
-Capytale rich text editor.
+Capytale rich text editor. Based on Lexical playground.
+
+Last Lexical playground commit taken into account: 9650950 (2023-09-29)
 
 # Build
 

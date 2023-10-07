@@ -149,23 +149,41 @@ const FONT_SIZE_OPTIONS: [string | null, string][] = [
 ];
 
 const ELEMENT_FORMAT_OPTIONS: {
-  [key: string]: { icon: string; name: string };
+    [key in Exclude<ElementFormatType, ''>]: {
+        icon: string;
+        iconRTL: string;
+        name: string;
+      };
 } = {
   center: {
     icon: "center-align",
+    iconRTL: 'center-align',
     name: "Centré",
+  },
+  end: {
+    icon: 'right-align',
+    iconRTL: 'left-align',
+    name: 'À la fin',
   },
   justify: {
     icon: "justify-align",
+    iconRTL: 'justify-align',
     name: "Justifié",
   },
   left: {
     icon: "left-align",
+    iconRTL: 'left-align',
     name: "À gauche",
   },
   right: {
     icon: "right-align",
+    iconRTL: 'right-align',
     name: "À droite",
+  },
+  start: {
+    icon: 'left-align',
+    iconRTL: 'right-align',
+    name: 'Au début',
   },
 };
 
@@ -436,11 +454,14 @@ function ElementFormatDropdown({
   isRTL: boolean;
   disabled: boolean;
 }) {
+  const formatOption = ELEMENT_FORMAT_OPTIONS[value || 'left'];
   return (
     <DropDown
       disabled={disabled}
-      buttonLabel={ELEMENT_FORMAT_OPTIONS[value].name}
-      buttonIconClassName={`icon ${ELEMENT_FORMAT_OPTIONS[value].icon}`}
+      buttonLabel={formatOption.name}
+      buttonIconClassName={`icon ${
+        isRTL ? formatOption.iconRTL : formatOption.icon
+      }`}
       buttonClassName="toolbar-item spaced alignment"
       buttonAriaLabel="Formatting options for text alignment"
     >
@@ -479,6 +500,34 @@ function ElementFormatDropdown({
       >
         <i className="icon justify-align" />
         <span className="text">Justifier</span>
+      </DropDownItem>
+      <Divider /><DropDownItem
+        onClick={() => {
+          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'start');
+        }}
+        className="item">
+        <i
+          className={`icon ${
+            isRTL
+              ? ELEMENT_FORMAT_OPTIONS.start.iconRTL
+              : ELEMENT_FORMAT_OPTIONS.start.icon
+          }`}
+        />
+        <span className="text">Aligner au début</span>
+      </DropDownItem>
+      <DropDownItem
+        onClick={() => {
+          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'end');
+        }}
+        className="item">
+        <i
+          className={`icon ${
+            isRTL
+              ? ELEMENT_FORMAT_OPTIONS.end.iconRTL
+              : ELEMENT_FORMAT_OPTIONS.end.icon
+          }`}
+        />
+        <span className="text">Aligner à la fin</span>
       </DropDownItem>
       <Divider />
       <DropDownItem
