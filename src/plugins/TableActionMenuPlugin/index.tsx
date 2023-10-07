@@ -486,7 +486,9 @@ function TableActionMenu({
           className="item"
           onClick={() => mergeTableCellsAtSelection()}
           data-test-id="table-merge-cells">
-          Merge cells
+          <span className="text">
+            Fusionner cellules
+          </span>
         </button>
       );
     } else if (canUnmergeCell) {
@@ -495,7 +497,9 @@ function TableActionMenu({
           className="item"
           onClick={() => unmergeTableCellsAtSelection()}
           data-test-id="table-unmerge-cells">
-          Unmerge cells
+          <span className="text">
+            Défusionner cellules
+          </span>
         </button>
       );
     }
@@ -513,7 +517,7 @@ function TableActionMenu({
       <button
         className="item"
         onClick={() =>
-          showColorPickerModal('Cell background color', () => (
+          showColorPickerModal('Couleur de fond de cellule', () => (
             <ColorPicker
               color={backgroundColor}
               onChange={handleCellBackgroundColor}
@@ -521,7 +525,7 @@ function TableActionMenu({
           ))
         }
         data-test-id="table-background-color">
-        <span className="text">Background color</span>
+        <span className="text">Couleur de fond</span>
       </button>
       <hr />
       <button
@@ -529,9 +533,9 @@ function TableActionMenu({
         onClick={() => insertTableRowAtSelection(false)}
         data-test-id="table-insert-row-above">
         <span className="text">
-          Insert{' '}
-          {selectionCounts.rows === 1 ? 'row' : `${selectionCounts.rows} rows`}{' '}
-          above
+          Insérer{' '}
+          {selectionCounts.rows === 1 ? 'ligne' : `${selectionCounts.rows} lignes`}{' '}
+          au dessus
         </span>
       </button>
       <button
@@ -539,9 +543,9 @@ function TableActionMenu({
         onClick={() => insertTableRowAtSelection(true)}
         data-test-id="table-insert-row-below">
         <span className="text">
-          Insert{' '}
-          {selectionCounts.rows === 1 ? 'row' : `${selectionCounts.rows} rows`}{' '}
-          below
+          Insérer{' '}
+          {selectionCounts.rows === 1 ? 'ligne' : `${selectionCounts.rows} lignes`}{' '}
+          en dessous
         </span>
       </button>
       <hr />
@@ -550,11 +554,11 @@ function TableActionMenu({
         onClick={() => insertTableColumnAtSelection(false)}
         data-test-id="table-insert-column-before">
         <span className="text">
-          Insert{' '}
+          Insérer{' '}
           {selectionCounts.columns === 1
-            ? 'column'
-            : `${selectionCounts.columns} columns`}{' '}
-          left
+            ? 'colonne'
+            : `${selectionCounts.columns} colonnes`}{' '}
+          à gauche
         </span>
       </button>
       <button
@@ -562,11 +566,11 @@ function TableActionMenu({
         onClick={() => insertTableColumnAtSelection(true)}
         data-test-id="table-insert-column-after">
         <span className="text">
-          Insert{' '}
+          Insérer{' '}
           {selectionCounts.columns === 1
-            ? 'column'
-            : `${selectionCounts.columns} columns`}{' '}
-          right
+            ? 'colonne'
+            : `${selectionCounts.columns} colonnes`}{' '}
+          à droite
         </span>
       </button>
       <hr />
@@ -574,37 +578,37 @@ function TableActionMenu({
         className="item"
         onClick={() => deleteTableColumnAtSelection()}
         data-test-id="table-delete-columns">
-        <span className="text">Delete column</span>
+        <span className="text">Supprimer colonne</span>
       </button>
       <button
         className="item"
         onClick={() => deleteTableRowAtSelection()}
         data-test-id="table-delete-rows">
-        <span className="text">Delete row</span>
+        <span className="text">Supprimer ligne</span>
       </button>
       <button
         className="item"
         onClick={() => deleteTableAtSelection()}
         data-test-id="table-delete">
-        <span className="text">Delete table</span>
+        <span className="text">Supprimer tableau</span>
       </button>
       <hr />
       <button className="item" onClick={() => toggleTableRowIsHeader()}>
         <span className="text">
           {(tableCellNode.__headerState & TableCellHeaderStates.ROW) ===
           TableCellHeaderStates.ROW
-            ? 'Remove'
-            : 'Add'}{' '}
-          row header
+            ? 'Effacer'
+            : 'Définir'}{' '}
+          ligne d'en-tête
         </span>
       </button>
       <button className="item" onClick={() => toggleTableColumnIsHeader()}>
         <span className="text">
           {(tableCellNode.__headerState & TableCellHeaderStates.COLUMN) ===
           TableCellHeaderStates.COLUMN
-            ? 'Remove'
-            : 'Add'}{' '}
-          column header
+            ? 'Effacer'
+            : 'Définir'}{' '}
+          colonne d'en-tête
         </span>
       </button>
     </div>,

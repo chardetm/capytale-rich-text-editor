@@ -1112,7 +1112,7 @@ export default function ToolbarPlugin({
             <DropDownItem
               onClick={() => {
                 showModal("Insérer un tableau", (onClose) => (
-                  <InsertNewTableDialog
+                  <InsertTableDialog
                     activeEditor={activeEditor}
                     onClose={onClose}
                   />
