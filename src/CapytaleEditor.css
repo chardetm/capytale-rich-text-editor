@@ -9,6 +9,11 @@
   flex-direction: column;
 }
 
+.editor-inner.too-big {
+  border: 2px solid rgb(200, 0, 0);
+  height: calc(100% - 4px);
+}
+
 .editor-add-paragraph {
   width: 100%;
   height: var(--add-paragraph-height);
