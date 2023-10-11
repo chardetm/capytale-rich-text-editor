@@ -12,7 +12,7 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import "./CapytaleEditor.css";
 import { useEditorContext } from "./contexts/EditorContext";
 
-const byteSize = (str) => new Blob([str]).size;
+const byteSize = (str: string): number => new Blob([str]).size;
 
 export interface ICapytaleEditorContentProps {
   isEditable?: boolean;
