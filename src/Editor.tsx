@@ -98,7 +98,9 @@ const Editor = ({
   const [activeEditor, setActiveEditor] = useState(editor);
 
   const editorStateRef = useRef(null);
-  const placeholderComponent = <Placeholder>{placeholder}</Placeholder>;
+  const placeholderComponent = isEditable ? (
+    <Placeholder>{placeholder}</Placeholder>
+  ) : null;
 
   const editorContext = useEditorContext();
   useEffect(() => {
