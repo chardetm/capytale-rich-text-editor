@@ -403,6 +403,10 @@
    mask-size: contain;
    -webkit-mask-size: contain;
  }
+
+ .caprte-dropdown .table {
+  margin-bottom: 0;
+ }
  
  i.image {
    background-image: url(images/icons/file-image.svg);
