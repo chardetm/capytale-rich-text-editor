@@ -1154,7 +1154,7 @@ export default function ToolbarPlugin({
                 className="item"
               >
                 <i className="icon equation" />
-                <span className="text">Equation</span>
+                <span className="text">Formule mathématique</span>
               </DropDownItem>
             )}
             <DropDownItem
