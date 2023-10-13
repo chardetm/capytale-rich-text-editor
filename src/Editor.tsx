@@ -55,6 +55,7 @@ import Placeholder from "./ui/Placeholder";
 
 // Maths
 import MathPlugin from "./plugins/MathPlugin";
+import "mathlive/static.css";
 
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { EditorState, LexicalEditor } from "lexical";

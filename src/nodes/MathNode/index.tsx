@@ -1,6 +1,6 @@
 import { $createNodeSelection, $setSelection, DOMExportOutput, EditorConfig, LexicalEditor, LexicalNode, NodeKey, SerializedLexicalNode, Spread, isHTMLElement, } from 'lexical';
 import { DecoratorNode, } from 'lexical';
-import { createRef } from 'react';
+import React, { createRef } from 'react';
 import { MathfieldElement, convertLatexToMarkup } from "mathlive";
 import MathComponent from './MathComponent';
 

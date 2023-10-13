@@ -1,5 +1,5 @@
 "use client"
-import { DOMAttributes } from "react";
+import React, { DOMAttributes } from "react";
 import { $createRangeSelection, $createTextNode, $getSelection, $isNodeSelection, $isParagraphNode, $isRangeSelection, $setSelection, GridSelection, NodeKey, NodeSelection, ParagraphNode, RangeSelection } from 'lexical';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { $getNodeByKey } from 'lexical';

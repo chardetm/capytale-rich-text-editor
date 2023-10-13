@@ -91,6 +91,10 @@ import {
 import InsertLayoutDialog from "../LayoutPlugin/InsertLayoutDialog";
 import { InsertNewTableDialog, InsertTableDialog } from "../TablePlugin";
 
+// Math
+import { MathNode } from "../../nodes/MathNode";
+import { INSERT_MATH_COMMAND } from "../MathPlugin";
+
 const blockTypeToBlockName = {
   bullet: "Liste à puces",
   check: "Liste à cocher",
@@ -148,41 +152,41 @@ const FONT_SIZE_OPTIONS: [string | null, string][] = [
 ];
 
 const ELEMENT_FORMAT_OPTIONS: {
-    [key in Exclude<ElementFormatType, ''>]: {
-        icon: string;
-        iconRTL: string;
-        name: string;
-      };
+  [key in Exclude<ElementFormatType, "">]: {
+    icon: string;
+    iconRTL: string;
+    name: string;
+  };
 } = {
   center: {
     icon: "center-align",
-    iconRTL: 'center-align',
+    iconRTL: "center-align",
     name: "Centré",
   },
   end: {
-    icon: 'right-align',
-    iconRTL: 'left-align',
-    name: 'À la fin',
+    icon: "right-align",
+    iconRTL: "left-align",
+    name: "À la fin",
   },
   justify: {
     icon: "justify-align",
-    iconRTL: 'justify-align',
+    iconRTL: "justify-align",
     name: "Justifié",
   },
   left: {
     icon: "left-align",
-    iconRTL: 'left-align',
+    iconRTL: "left-align",
     name: "À gauche",
   },
   right: {
     icon: "right-align",
-    iconRTL: 'right-align',
+    iconRTL: "right-align",
     name: "À droite",
   },
   start: {
-    icon: 'left-align',
-    iconRTL: 'right-align',
-    name: 'Au début',
+    icon: "left-align",
+    iconRTL: "right-align",
+    name: "Au début",
   },
 };
 
@@ -416,7 +420,9 @@ function FontDropDown({
       buttonClassName={"toolbar-item " + style}
       buttonLabel={name}
       buttonIconClassName={
-        style === "font-family" ? "icon block-type font-family" : "icon block-type font-size"
+        style === "font-family"
+          ? "icon block-type font-family"
+          : "icon block-type font-size"
       }
       buttonAriaLabel={buttonAriaLabel}
     >
@@ -453,7 +459,7 @@ function ElementFormatDropdown({
   isRTL: boolean;
   disabled: boolean;
 }) {
-  const formatOption = ELEMENT_FORMAT_OPTIONS[value || 'left'];
+  const formatOption = ELEMENT_FORMAT_OPTIONS[value || "left"];
   return (
     <DropDown
       disabled={disabled}
@@ -500,11 +506,13 @@ function ElementFormatDropdown({
         <i className="icon justify-align" />
         <span className="text">Justifier</span>
       </DropDownItem>
-      <Divider /><DropDownItem
+      <Divider />
+      <DropDownItem
         onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'start');
+          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "start");
         }}
-        className="item">
+        className="item"
+      >
         <i
           className={`icon ${
             isRTL
@@ -516,9 +524,10 @@ function ElementFormatDropdown({
       </DropDownItem>
       <DropDownItem
         onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'end');
+          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "end");
         }}
-        className="item">
+        className="item"
+      >
         <i
           className={`icon ${
             isRTL
@@ -1136,22 +1145,17 @@ export default function ToolbarPlugin({
               <i className="icon columns" />
               <span className="text">Colonnes...</span>
             </DropDownItem>
-            {/* 
-            <DropDownItem
-              onClick={() => {
-                showModal("Insérer une équation", (onClose) => (
-                  <InsertEquationDialog
-                    activeEditor={activeEditor}
-                    onClose={onClose}
-                  />
-                ));
-              }}
-              className="item"
-            >
-              <i className="icon equation" />
-              <span className="text">Equation</span>
-            </DropDownItem>
-            */}
+            {editor.hasNode(MathNode) && (
+              <DropDownItem
+                onClick={() => {
+                  editor.dispatchCommand(INSERT_MATH_COMMAND, { value: "" });
+                }}
+                className="item"
+              >
+                <i className="icon equation" />
+                <span className="text">Equation</span>
+              </DropDownItem>
+            )}
             <DropDownItem
               onClick={() => {
                 editor.dispatchCommand(INSERT_COLLAPSIBLE_COMMAND, undefined);
