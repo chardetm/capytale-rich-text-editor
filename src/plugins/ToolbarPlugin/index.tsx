@@ -83,7 +83,6 @@ import { getSelectedNode } from "../../utils/getSelectedNode";
 import { sanitizeUrl } from "../../utils/url";
 import { EmbedConfigs } from "../AutoEmbedPlugin";
 import { INSERT_COLLAPSIBLE_COMMAND } from "../CollapsiblePlugin";
-import { InsertEquationDialog } from "../EquationsPlugin";
 import {
   INSERT_IMAGE_COMMAND,
   InsertImageDialog,

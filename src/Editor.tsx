@@ -33,7 +33,6 @@ import DragDropPaste from "./plugins/DragDropPastePlugin";
 import DraggableBlockPlugin from "./plugins/DraggableBlockPlugin";
 import EmojiPickerPlugin from "./plugins/EmojiPickerPlugin";
 import EmojisPlugin from "./plugins/EmojisPlugin";
-import EquationsPlugin from "./plugins/EquationsPlugin";
 import FloatingLinkEditorPlugin from "./plugins/FloatingLinkEditorPlugin";
 import FloatingTextFormatToolbarPlugin from "./plugins/FloatingTextFormatToolbarPlugin";
 import ImagesPlugin from "./plugins/ImagesPlugin";
@@ -230,7 +229,6 @@ const Editor = ({
           <YouTubePlugin />
           {isEditable && <FloatingTextFormatToolbarPlugin />}
           <HorizontalRulePlugin />
-          <EquationsPlugin />
           <TabFocusPlugin />
           <TabIndentationPlugin />
           <CollapsiblePlugin />
