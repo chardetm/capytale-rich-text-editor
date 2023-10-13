@@ -53,6 +53,9 @@ import PlaygroundEditorTheme from "./themes/PlaygroundEditorTheme";
 import ContentEditable from "./ui/ContentEditable";
 import Placeholder from "./ui/Placeholder";
 
+// Maths
+import MathPlugin from "./plugins/MathPlugin";
+
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { EditorState, LexicalEditor } from "lexical";
 import { $generateHtmlFromNodes } from "@lexical/html";
@@ -233,6 +236,7 @@ const Editor = ({
           <TabIndentationPlugin />
           <CollapsiblePlugin />
           <LayoutPlugin />
+          <MathPlugin />
           {isEditable && (
             <FloatingLinkEditorPlugin
               isLinkEditMode={isLinkEditMode}
