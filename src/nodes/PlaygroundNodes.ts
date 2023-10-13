@@ -30,6 +30,9 @@ import {LayoutItemNode} from './LayoutItemNode';
 import {TableNode as NewTableNode} from './TableNode';
 import {YouTubeNode} from './YouTubeNode';
 
+// Math
+import { MathNode } from "./MathNode";
+
 const PlaygroundNodes: Array<Klass<LexicalNode>> = [
   HeadingNode,
   ListNode,
@@ -57,6 +60,7 @@ const PlaygroundNodes: Array<Klass<LexicalNode>> = [
   CollapsibleTitleNode,
   LayoutContainerNode,
   LayoutItemNode,
+  MathNode,
 ];
 
 export default PlaygroundNodes;

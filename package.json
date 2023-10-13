@@ -19,7 +19,7 @@
   ],
   "publishConfig": {
     "@capytale:registry": "https://gitlab.in.ac-paris.fr/api/v4/projects/95/packages/npm/"
-  },  
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -63,6 +63,7 @@
     "katex": "^0.16.8",
     "lexical": "0.12.2",
     "lodash-es": "^4.17.21",
+    "mathlive": "^0.95.5",
     "use-child": "^1.0.0"
   }
 }

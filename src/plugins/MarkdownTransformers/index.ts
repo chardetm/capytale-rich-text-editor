@@ -49,6 +49,10 @@ import {
 import {$createImageNode, $isImageNode, ImageNode} from '../../nodes/ImageNode';
 import emojiList from '../../utils/emoji-list';
 
+// Math
+import { $createMathNode, $isMathNode, MathNode } from '../../nodes/MathNode';
+
+
 export const HR: ElementTransformer = {
   dependencies: [HorizontalRuleNode],
   export: (node: LexicalNode) => {
@@ -124,6 +128,27 @@ export const EQUATION: TextMatchTransformer = {
     const [, equation] = match;
     const equationNode = $createEquationNode(equation, true);
     textNode.replace(equationNode);
+  },
+  trigger: '$',
+  type: 'text-match',
+};
+
+export const MATH: TextMatchTransformer = {
+  dependencies: [MathNode],
+  export: (node, exportChildren, exportFormat) => {
+    if (!$isMathNode(node)) {
+      return null;
+    }
+
+    return `$${node.getValue()}$`;
+  },
+  importRegExp: /\$+(.*?)\$+/,
+  regExp: /\$+(.*?)\$+$/,
+  replace: (textNode, match) => {
+    const [, value] = match;
+    const mathNode = $createMathNode(value);
+    textNode.replace(mathNode);
+    mathNode.select();
   },
   trigger: '$',
   type: 'text-match',
@@ -291,6 +316,7 @@ export const PLAYGROUND_TRANSFORMERS: Array<Transformer> = [
   IMAGE,
   EMOJI,
   EQUATION,
+  MATH,
   CHECK_LIST,
   ...ELEMENT_TRANSFORMERS,
   ...TEXT_FORMAT_TRANSFORMERS,
