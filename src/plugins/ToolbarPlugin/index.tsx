@@ -136,6 +136,7 @@ const FONT_FAMILY_OPTIONS: [string, string][] = [
   ["Times New Roman", "Times New Roman"],
   ["Trebuchet MS", "Trebuchet MS"],
   ["Verdana", "Verdana"],
+  ["KaTeX_Main", "Maths (KaTeX)"],
 ];
 
 const FONT_SIZE_OPTIONS: [string | null, string][] = [
