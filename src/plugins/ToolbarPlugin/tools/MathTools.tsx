@@ -1,29 +1,94 @@
-"use client"
-import { LexicalEditor, } from "lexical";
+"use client";
+import { LexicalEditor } from "lexical";
 import { MathNode } from "../../../nodes/MathNode";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { $getNodeStyleValueForProperty, $patchStyle } from "../../../utils/mathUtils";
+import {
+  $getNodeStyleValueForProperty,
+  $patchStyle,
+} from "../../../utils/mathUtils";
 import type { MathfieldElement } from "mathlive";
+import DropdownColorPicker from "../../../ui/DropdownColorPicker";
+import DropDown, { DropDownItem } from "../../../ui/DropDown";
+import useModal from "../../../hooks/useModal";
+import TextArea from "../../../ui/Textarea";
+import Button from '../../../ui/Button';
+import {DialogActions} from '../../../ui/Dialog';
 
-export default function MathTools({ editor, node, fontColor, bgColor }: { editor: LexicalEditor, node: MathNode, fontColor: string, bgColor: string}) {
-  const [fontSize, setFontSize] = useState('15px');
-  const FONT_SIZE_OPTIONS: [string, string][] = [
-    ['10px', '10'],
-    ['11px', '11'],
-    ['12px', '12'],
-    ['13px', '13'],
-    ['14px', '14'],
-    ['15px', '15'],
-    ['16px', '16'],
-    ['17px', '17'],
-    ['18px', '18'],
-    ['19px', '19'],
-    ['20px', '20'],
+export default function MathTools({
+  editor,
+  node,
+  fontColor,
+  bgColor,
+  isEditable,
+}: {
+  editor: LexicalEditor;
+  node: MathNode;
+  fontColor: string;
+  bgColor: string;
+  isEditable: boolean;
+}) {
+  const [modal, showModal] = useModal();
+  const [fontSize, setFontSize] = useState(null);
+  const FONT_SIZE_OPTIONS: [null | string, string][] = [
+    [null, "Par défaut"],
+    ["6px", "6px"],
+    ["8px", "8px"],
+    ["10px", "10px"],
+    ["12px", "12px"],
+    ["15px", "15px"],
+    ["18px", "18px"],
+    ["22px", "22px"],
+    ["26px", "26px"],
+    ["30px", "30px"],
   ];
+
+  function dropDownActiveClass(active: boolean) {
+    if (active) return "active caprte-dropdown-item-active";
+    else return "";
+  }
+
+  function MathFontSizeDropDown({
+    value,
+    disabled = false,
+  }: {
+    value: string | null;
+    disabled?: boolean;
+  }): JSX.Element {
+    let name = "";
+    for (const e of FONT_SIZE_OPTIONS) {
+      const [option, text] = e;
+      if (option == value) {
+        name = text;
+        break;
+      }
+    }
+
+    return (
+      <DropDown
+        disabled={disabled}
+        buttonClassName={"toolbar-item font-size"}
+        buttonLabel={name}
+        buttonIconClassName={"icon block-type font-size"}
+        buttonAriaLabel={"Choix de la taille de police"}
+      >
+        {FONT_SIZE_OPTIONS.map(([option, text]) => (
+          <DropDownItem
+            className={`item ${dropDownActiveClass(
+              value === option
+            )} ${"fontsize-item"}`}
+            onClick={() => onFontSizeSelect(option)}
+            key={option}
+          >
+            <span className="text">{text}</span>
+          </DropDownItem>
+        ))}
+      </DropDown>
+    );
+  }
 
   useEffect(() => {
     editor.getEditorState().read(() => {
-      const fontSize = $getNodeStyleValueForProperty(node, 'font-size', '15px');
+      const fontSize = $getNodeStyleValueForProperty(node, "font-size", null);
       setFontSize(fontSize);
     });
   }, [node]);
@@ -34,130 +99,165 @@ export default function MathTools({ editor, node, fontColor, bgColor }: { editor
         $patchStyle([node], styles);
       });
     },
-    [editor, node],
+    [editor, node]
   );
 
   const onFontSizeSelect = useCallback(
-    (e: SelectChangeEvent) => {
-      const fontSize = e.target.value;
+    (fontSize: string) => {
       setFontSize(fontSize);
-      applyStyleMath({ 'font-size': fontSize });
+      applyStyleMath({ "font-size": fontSize });
     },
-    [applyStyleMath],
+    [applyStyleMath]
   );
 
-  const onColorChange = useCallback((key: string, value: string) => {
-    const styleKey = key === 'text' ? 'color' : 'background-color';
-    const mathfield = node.getMathfield();
-    if (!mathfield) return;
-    if (mathfield.selectionIsCollapsed) {
-      applyStyleMath({ [styleKey]: value });
-    }
-    else {
-      const style = key === "text" ? ({ color: value }) : ({ backgroundColor: value });
-      const selection = mathfield.selection;
-      const range = selection.ranges[0];
-      mathfield.applyStyle(style, range);
-      mathfield.executeCommand("commit");
-    }
-  }, [applyStyleMath, node]);
+  const onColorChange = useCallback(
+    (key: string, value: string) => {
+      const styleKey = key === "text" ? "color" : "background-color";
+      const mathfield = node.getMathfield();
+      if (!mathfield) return;
+      if (mathfield.selectionIsCollapsed) {
+        applyStyleMath({ [styleKey]: value });
+      } else {
+        const style =
+          key === "text" ? { color: value } : { backgroundColor: value };
+        const selection = mathfield.selection;
+        const range = selection.ranges[0];
+        mathfield.applyStyle(style, range);
+        mathfield.executeCommand("commit");
+      }
+    },
+    [applyStyleMath, node]
+  );
 
-  const [open, setOpen] = useState(false);
   const openEditDialog = useCallback(() => {
-    setOpen(true);
-  }, []);
-  const handleClose = useCallback(() => {
-    setOpen(false);
+    showModal("Éditer LaTeX", (onClose) => (
+      <form onSubmit={handleEdit}>
+      <TextArea
+        label="URL de l'image"
+        placeholder="ex : https://source.unsplash.com/random"
+        onChange={updateFormData}
+        value={formData}
+        data-test-id="image-modal-url-input"
+      />
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <div>Prévisualisation :</div>
+          <math-field
+            ref={mathfieldRef}
+            value={formData}
+            style={{ width: "auto", margin: "0 auto" }}
+            read-only
+          ></math-field>
+        </div>
+      <DialogActions>
+        <Button
+          onClick={() => {
+            setFormData(node.getValue());
+            onClose();
+          }}>
+          Annuler
+        </Button>
+        <Button
+          disabled={!isEditable}
+          onClick={() => {
+            handleEdit();
+            onClose();
+          }}>
+          Confirmer
+        </Button>
+      </DialogActions>
+      </form>
+    ));
   }, []);
 
   const mathfieldRef = useRef<MathfieldElement>(null);
-  const [formData, setFormData] = useState({ value: node.getValue() });
+  const [formData, setFormData] = useState(node.getValue());
   useEffect(() => {
-    setFormData({ value: node.getValue() });
+    setFormData(node.getValue());
   }, [node]);
 
-  const updateFormData = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    if (mathfieldRef.current) {
-      mathfieldRef.current.setValue(e.target.value);
-    }
-  }, [formData]);
-  const handleEdit = useCallback((e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    const { value } = formData;
-    editor.update(() => {
-      node.setValue(value);
-    });
-    handleClose();
-  }, [editor, formData, handleClose, node]);
+  const updateFormData = useCallback(
+    (value: string) => {
+      setFormData(value);
+      if (mathfieldRef.current) {
+        mathfieldRef.current.setValue(value);
+      }
+    },
+    [formData]
+  );
+  const handleEdit = useCallback(
+    () => {
+      editor.update(() => {
+        node.setValue(formData);
+      });
+    },
+    [editor, formData, node]
+  );
 
   const openWolfram = useCallback(() => {
     const mathfield = node.getMathfield();
     if (!mathfield) return;
     const selection = mathfield.selection;
-    const value = mathfield.getValue(selection, 'latex-unstyled') || mathfield.getValue('latex-unstyled');
-    window.open(`https://www.wolframalpha.com/input?i=${encodeURIComponent(value)}`);
+    const value =
+      mathfield.getValue(selection, "latex-unstyled") ||
+      mathfield.getValue("latex-unstyled");
+    window.open(
+      `https://www.wolframalpha.com/input?i=${encodeURIComponent(value)}`
+    );
   }, [node]);
 
-  useFixedBodyScroll(open);
-
-  return (<>
-    <ToggleButtonGroup size="small" sx={{ ...sx }} >
-      <ToggleButton value="wolfram" onClick={openWolfram}>
-        <WolframIcon />
-      </ToggleButton>
-      <ToggleButton value="edit" onClick={openEditDialog}>
-        <Edit />
-      </ToggleButton>
-      <Dialog open={open} onClose={handleClose} maxWidth="md" sx={{ '& .MuiDialog-paper': { width: '100%' } }}>
-        <form onSubmit={handleEdit}>
-          <DialogTitle>Edit LaTeX</DialogTitle>
-          <DialogContent >
-            <TextField margin="normal" size="small" fullWidth multiline id="value" value={formData.value} onChange={updateFormData} label="Latex Value" name="value" autoFocus />
-            <Box sx={{ display: "flex", flexDirection: "column" }}>
-              <Typography variant="button" component="h3" color="text.secondary" sx={{ my: 1 }}>
-                Preview
-              </Typography>
-              <math-field ref={mathfieldRef} value={formData.value} style={{ width: "auto", margin: "0 auto" }} read-only></math-field>
-            </Box>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button type='submit' onClick={handleEdit}>Save</Button>
-          </DialogActions>
-        </form>
-      </Dialog>
-
+  return (
+    <>
+      <button
+        onClick={openWolfram}
+        className={"toolbar-item spaced"}
+        title="Ouvrir Wolfram"
+        type="button"
+        aria-label="Ouvrir Wolfram"
+      >
+        <i className="format code" />
+      </button>
+      <button
+        disabled={!isEditable}
+        onClick={openEditDialog}
+        className={"toolbar-item spaced"}
+        title="Modifier LaTeX"
+        type="button"
+        aria-label="Modifier LaTeX"
+      >
+        <i className="format code" />
+      </button>
+      <MathFontSizeDropDown value={fontSize} disabled={!isEditable} />
       <DropdownColorPicker
-            buttonClassName="toolbar-item color-picker"
-            buttonAriaLabel="Formatter la couleur de texte (maths)"
-            buttonIconClassName="icon font-color"
-            color={fontColor}
-            onChange={(value) => onColorChange("text", value)}
-            title="text color"
-          />
-          <DropdownColorPicker
-                buttonClassName="toolbar-item color-picker"
-                buttonAriaLabel="Formatter la couleur de fond (maths)"
-                buttonIconClassName="icon bg-color"
-                color={bgColor}
-                onChange={(value) => onColorChange("background", value)}
-                title="text color"
-              />
-      <ToggleButton value="delete"
+        buttonClassName="toolbar-item color-picker"
+        buttonAriaLabel="Formatter la couleur de texte (maths)"
+        buttonIconClassName="icon font-color"
+        color={fontColor}
+        onChange={(value) => onColorChange("text", value)}
+        title="text color"
+      />
+      <DropdownColorPicker
+        buttonClassName="toolbar-item color-picker"
+        buttonAriaLabel="Formatter la couleur de fond (maths)"
+        buttonIconClassName="icon bg-color"
+        color={bgColor}
+        onChange={(value) => onColorChange("background", value)}
+        title="text color"
+      />
+      <button
+        disabled={!isEditable}
         onClick={() => {
           editor.update(() => {
             node.selectPrevious();
             node.remove();
           });
-        }}>
-        <Delete />
-      </ToggleButton>
-    </ToggleButtonGroup>
-    <Select size='small' onChange={onFontSizeSelect} value={fontSize}>
-      {FONT_SIZE_OPTIONS.map(([option, text]) => <MenuItem key={option} value={option}>{text}</MenuItem>)}
-    </Select>
-  </>
-  )
-
+        }}
+        className={"toolbar-item spaced"}
+        title="Supprimer"
+        type="button"
+        aria-label="Supprimer"
+      >
+        <i className="format code" />
+      </button>
+    </>
+  );
 }

@@ -94,6 +94,11 @@ import { InsertNewTableDialog, InsertTableDialog } from "../TablePlugin";
 // Math
 import { MathNode } from "../../nodes/MathNode";
 import { INSERT_MATH_COMMAND } from "../MathPlugin";
+import { $isMathNode } from '../../nodes/MathNode';
+import {
+  $patchStyle,
+} from "../../utils/mathUtils";
+import MathTools from "./tools/MathTools";
 
 const blockTypeToBlockName = {
   bullet: "Liste à puces",
@@ -108,6 +113,7 @@ const blockTypeToBlockName = {
   number: "Liste numérotée",
   paragraph: "Paragraphe",
   quote: "Citation",
+  math: "Formule mathématique",
 };
 
 const rootTypeToRootName = {
@@ -666,6 +672,9 @@ export default function ToolbarPlugin({
             );
             return;
           }
+          if ($isMathNode(element)) {
+            setBlockType("math");
+          }
         }
       }
       // Handle buttons
@@ -768,6 +777,8 @@ export default function ToolbarPlugin({
           DEPRECATED_$isGridSelection(selection)
         ) {
           $patchStyleText(selection, styles);
+          const mathNodes = selection.getNodes().filter($isMathNode);
+          $patchStyle(mathNodes, styles);
         }
       });
     },
@@ -888,7 +899,7 @@ export default function ToolbarPlugin({
           <Divider />
         </>
       )}
-      {blockType === "code" ? (
+      {blockType === "code" && (
         <DropDown
           disabled={!isEditable}
           buttonClassName="toolbar-item code-language"
@@ -909,7 +920,17 @@ export default function ToolbarPlugin({
             );
           })}
         </DropDown>
-      ) : (
+      )}
+      {blockType === "math" && (
+        <MathTools 
+        bgColor={bgColor}
+        fontColor={fontColor}
+        editor={editor}
+        isEditable={isEditable}
+        node={selectedElementKey !== null ? $getNodeByKey(selectedElementKey) : null}
+        />
+    )}
+    {blockType !== "code" && blockType !== "math" && (
         <>
           <FontDropDown
             disabled={!isEditable}
