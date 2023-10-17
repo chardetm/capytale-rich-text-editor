@@ -587,6 +587,7 @@ export default function ToolbarPlugin({
   const [fontFamily, setFontFamily] = useState<string>("Arial");
   const [elementFormat, setElementFormat] = useState<ElementFormatType>("left");
   const [isLink, setIsLink] = useState(false);
+  const [isMath, setIsMath] = useState(false);
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
   const [isUnderline, setIsUnderline] = useState(false);
@@ -602,6 +603,7 @@ export default function ToolbarPlugin({
   const [isEditable, setIsEditable] = useState(() => editor.isEditable());
 
   const $updateToolbar = useCallback(() => {
+    console.log("Updating toolbar...");
     const selection = $getSelection();
     if ($isRangeSelection(selection)) {
       const anchorNode = selection.anchor.getNode();
@@ -639,6 +641,12 @@ export default function ToolbarPlugin({
         setIsLink(false);
       }
 
+      // Update maths
+      setIsMath($isMathNode(node));
+      console.log(node);
+      console.log($isMathNode(node));
+      console.log($isMathNode(parent));
+
       const tableNode = $findMatchingParent(node, $isTableNode);
       if ($isTableNode(tableNode)) {
         setRootType("table");
@@ -671,9 +679,6 @@ export default function ToolbarPlugin({
               language ? CODE_LANGUAGE_MAP[language] || language : ""
             );
             return;
-          }
-          if ($isMathNode(element)) {
-            setBlockType("math");
           }
         }
       }
@@ -921,7 +926,7 @@ export default function ToolbarPlugin({
           })}
         </DropDown>
       )}
-      {blockType === "math" && (
+      {isMath && (
         <MathTools 
         bgColor={bgColor}
         fontColor={fontColor}
@@ -930,7 +935,7 @@ export default function ToolbarPlugin({
         node={selectedElementKey !== null ? $getNodeByKey(selectedElementKey) : null}
         />
     )}
-    {blockType !== "code" && blockType !== "math" && (
+    {blockType !== "code" && !isMath && (
         <>
           <FontDropDown
             disabled={!isEditable}
