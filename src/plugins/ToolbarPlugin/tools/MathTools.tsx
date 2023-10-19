@@ -132,66 +132,19 @@ export default function MathTools({
 
   const openEditDialog = useCallback(() => {
     showModal("Éditer LaTeX", (onClose) => (
-      <div>
-        <TextArea
-          label="URL de l'image"
-          placeholder="ex : https://source.unsplash.com/random"
-          onChange={updateFormData}
-          value={formData}
-          data-test-id="image-modal-url-input"
-        />
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <div>Prévisualisation :</div>
-          <math-field
-            ref={mathfieldRef}
-            value={formData}
-            style={{ width: "auto", margin: "0 auto" }}
-            read-only
-          ></math-field>
-        </div>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              setFormData(node.getValue());
-              onClose();
-            }}
-          >
-            Annuler
-          </Button>
-          <Button
-            disabled={!isEditable}
-            onClick={() => {
-              handleEdit();
-              onClose();
-            }}
-          >
-            Confirmer
-          </Button>
-        </DialogActions>
-      </div>
+      <EditLatexDialog
+        isEditable={isEditable}
+        node={node}
+        onConfirm={(latex) => {
+          editor.update(() => {
+            node.setValue(latex);
+          });
+          onClose();
+        }}
+        onCancel={onClose}
+      />
     ));
-  }, []);
-
-  const mathfieldRef = useRef<MathfieldElement>(null);
-  const [formData, setFormData] = useState(node.getValue());
-  useEffect(() => {
-    setFormData(node.getValue());
-  }, [node]);
-
-  const updateFormData = useCallback(
-    (value: string) => {
-      setFormData(value);
-      if (mathfieldRef.current) {
-        mathfieldRef.current.setValue(value);
-      }
-    },
-    [formData]
-  );
-  const handleEdit = useCallback(() => {
-    editor.update(() => {
-      node.setValue(formData);
-    });
-  }, [editor, formData, node]);
+  }, [isEditable, node]);
 
   const openWolfram = useCallback(() => {
     const mathfield = node.getMathfield();
@@ -214,7 +167,8 @@ export default function MathTools({
         type="button"
         aria-label="Ouvrir Wolfram"
       >
-        <i className="format code" />
+        <i className="format wolfram" />
+        <span className="crte-ibuttontext">Wolfram</span>
       </button>
       <button
         disabled={!isEditable}
@@ -224,9 +178,12 @@ export default function MathTools({
         type="button"
         aria-label="Modifier LaTeX"
       >
-        <i className="format code" />
+        <i className="format tex" />
+        <span className="crte-ibuttontext">LaTeX</span>
       </button>
+      <Divider />
       <MathFontSizeDropDown value={fontSize} disabled={!isEditable} />
+      {/* TODO: debug color pickers (infinite loop when used for now)
       <DropdownColorPicker
         buttonClassName="toolbar-item color-picker"
         buttonAriaLabel="Formatter la couleur de texte (maths)"
@@ -243,6 +200,7 @@ export default function MathTools({
         onChange={(value) => onColorChange("background", value)}
         title="text color"
       />
+      */}
       <button
         disabled={!isEditable}
         onClick={() => {
@@ -256,8 +214,81 @@ export default function MathTools({
         type="button"
         aria-label="Supprimer"
       >
-        <i className="format code" />
+        <i className="format clear" />
       </button>
+      {modal}
     </>
   );
+}
+
+function EditLatexDialog({
+  node,
+  isEditable,
+  onConfirm,
+  onCancel,
+}: {
+  node: MathNode;
+  isEditable: boolean;
+  onConfirm: (s: string) => void;
+  onCancel: () => void;
+}) {
+  const [latex, setLatex] = useState(node.getValue());
+  const mathfieldRef = useRef<MathfieldElement>(null);
+
+  const updateLatex = useCallback(
+    (value: string) => {
+      setLatex(value);
+      if (mathfieldRef.current) {
+        mathfieldRef.current.setValue(value);
+      }
+    },
+    [latex]
+  );
+
+  useEffect(() => {
+    updateLatex(node.getValue());
+  }, [node]);
+
+  return (
+    <div>
+      <TextArea
+        label="LaTeX"
+        placeholder="ex : \frac{2x}{3}"
+        onChange={updateLatex}
+        value={latex}
+        data-test-id="image-modal-url-input"
+      />
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <div>Prévisualisation :</div>
+        <math-field
+          ref={mathfieldRef}
+          value={latex}
+          style={{ width: "auto", margin: "0 auto" }}
+          read-only
+        ></math-field>
+      </div>
+      <DialogActions>
+        <Button
+          onClick={() => {
+            setLatex(node.getValue());
+            onCancel();
+          }}
+        >
+          Annuler
+        </Button>
+        <Button
+          disabled={!isEditable}
+          onClick={() => {
+            onConfirm(latex);
+          }}
+        >
+          Confirmer
+        </Button>
+      </DialogActions>
+    </div>
+  );
+}
+
+function Divider(): JSX.Element {
+  return <div className="divider" />;
 }

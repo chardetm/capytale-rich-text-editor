@@ -906,7 +906,7 @@ export default function ToolbarPlugin({
         <i className="format redo" />
       </button>
       <Divider />
-      {blockType in blockTypeToBlockName && activeEditor === editor && (
+      {blockType in blockTypeToBlockName && activeEditor === editor && !isMath && (
         <>
           <BlockFormatDropDown
             disabled={!isEditable}
