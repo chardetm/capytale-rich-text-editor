@@ -52,7 +52,9 @@ import {
   $getRoot,
   $getSelection,
   $isElementNode,
-  $isRangeSelection,
+  $isRangeSelection, // Math
+  LexicalNode,       // Math
+  $isNodeSelection,
   $isRootOrShadowRoot,
   $isTextNode,
   CAN_REDO_COMMAND,
@@ -602,10 +604,27 @@ export default function ToolbarPlugin({
   const [codeLanguage, setCodeLanguage] = useState<string>("");
   const [isEditable, setIsEditable] = useState(() => editor.isEditable());
 
+  // Math
+  const [selectedNode, setSelectedNode] = useState<LexicalNode | null>(null);
+
   const $updateToolbar = useCallback(() => {
-    console.log("Updating toolbar...");
+    console.log("updateToolbar");
     const selection = $getSelection();
+
+    // Math
+    if ($isNodeSelection(selection)) {
+      const node = selection.getNodes()[0];
+      setSelectedNode(node);
+      setIsMath($isMathNode(node));
+      setSelectedElementKey(null);
+      setBlockType('paragraph');
+    } else {
+      setSelectedNode(null);
+      setIsMath(false);
+    }
+
     if ($isRangeSelection(selection)) {
+        console.log("updateToolbar isRange");
       const anchorNode = selection.anchor.getNode();
       let element =
         anchorNode.getKey() === "root"
@@ -640,12 +659,6 @@ export default function ToolbarPlugin({
       } else {
         setIsLink(false);
       }
-
-      // Update maths
-      setIsMath($isMathNode(node));
-      console.log(node);
-      console.log($isMathNode(node));
-      console.log($isMathNode(parent));
 
       const tableNode = $findMatchingParent(node, $isTableNode);
       if ($isTableNode(tableNode)) {
@@ -932,7 +945,7 @@ export default function ToolbarPlugin({
         fontColor={fontColor}
         editor={editor}
         isEditable={isEditable}
-        node={selectedElementKey !== null ? $getNodeByKey(selectedElementKey) : null}
+        node={selectedNode as MathNode}
         />
     )}
     {blockType !== "code" && !isMath && (

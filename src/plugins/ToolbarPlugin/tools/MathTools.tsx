@@ -1,4 +1,5 @@
 "use client";
+import * as React from "react";
 import { LexicalEditor } from "lexical";
 import { MathNode } from "../../../nodes/MathNode";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -11,8 +12,8 @@ import DropdownColorPicker from "../../../ui/DropdownColorPicker";
 import DropDown, { DropDownItem } from "../../../ui/DropDown";
 import useModal from "../../../hooks/useModal";
 import TextArea from "../../../ui/Textarea";
-import Button from '../../../ui/Button';
-import {DialogActions} from '../../../ui/Dialog';
+import Button from "../../../ui/Button";
+import { DialogActions } from "../../../ui/Dialog";
 
 export default function MathTools({
   editor,
@@ -131,14 +132,14 @@ export default function MathTools({
 
   const openEditDialog = useCallback(() => {
     showModal("Éditer LaTeX", (onClose) => (
-      <form onSubmit={handleEdit}>
-      <TextArea
-        label="URL de l'image"
-        placeholder="ex : https://source.unsplash.com/random"
-        onChange={updateFormData}
-        value={formData}
-        data-test-id="image-modal-url-input"
-      />
+      <div>
+        <TextArea
+          label="URL de l'image"
+          placeholder="ex : https://source.unsplash.com/random"
+          onChange={updateFormData}
+          value={formData}
+          data-test-id="image-modal-url-input"
+        />
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div>Prévisualisation :</div>
           <math-field
@@ -148,24 +149,26 @@ export default function MathTools({
             read-only
           ></math-field>
         </div>
-      <DialogActions>
-        <Button
-          onClick={() => {
-            setFormData(node.getValue());
-            onClose();
-          }}>
-          Annuler
-        </Button>
-        <Button
-          disabled={!isEditable}
-          onClick={() => {
-            handleEdit();
-            onClose();
-          }}>
-          Confirmer
-        </Button>
-      </DialogActions>
-      </form>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setFormData(node.getValue());
+              onClose();
+            }}
+          >
+            Annuler
+          </Button>
+          <Button
+            disabled={!isEditable}
+            onClick={() => {
+              handleEdit();
+              onClose();
+            }}
+          >
+            Confirmer
+          </Button>
+        </DialogActions>
+      </div>
     ));
   }, []);
 
@@ -184,14 +187,11 @@ export default function MathTools({
     },
     [formData]
   );
-  const handleEdit = useCallback(
-    () => {
-      editor.update(() => {
-        node.setValue(formData);
-      });
-    },
-    [editor, formData, node]
-  );
+  const handleEdit = useCallback(() => {
+    editor.update(() => {
+      node.setValue(formData);
+    });
+  }, [editor, formData, node]);
 
   const openWolfram = useCallback(() => {
     const mathfield = node.getMathfield();
