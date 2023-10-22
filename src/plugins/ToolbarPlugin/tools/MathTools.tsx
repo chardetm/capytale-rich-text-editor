@@ -15,6 +15,8 @@ import TextArea from "../../../ui/Textarea";
 import Button from "../../../ui/Button";
 import { DialogActions } from "../../../ui/Dialog";
 
+import "./MathTools.css";
+
 export default function MathTools({
   editor,
   node,
@@ -256,16 +258,18 @@ function EditLatexDialog({
         placeholder="ex : \frac{2x}{3}"
         onChange={updateLatex}
         value={latex}
-        data-test-id="image-modal-url-input"
+        data-test-id="latex-modal-latex-input"
       />
-      <div style={{ display: "flex", flexDirection: "column" }}>
-        <div>Prévisualisation :</div>
-        <math-field
-          ref={mathfieldRef}
-          value={latex}
-          style={{ width: "auto", margin: "0 auto" }}
-          read-only
-        ></math-field>
+      <div className="crte-math__preview">
+        <div>Prévisualisation</div>
+        <div>
+          <math-field
+            ref={mathfieldRef}
+            value={latex}
+            style={{ width: "auto", margin: "0 auto" }}
+            read-only
+          ></math-field>
+        </div>
       </div>
       <DialogActions>
         <Button
