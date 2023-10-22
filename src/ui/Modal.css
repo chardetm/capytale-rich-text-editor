@@ -18,7 +18,7 @@
   left: 0px;
   right: 0px;
   background-color: rgba(40, 40, 40, 0.6);
-  flex-grow: 0px;
+  flex-grow: 0;
   flex-shrink: 1px;
   z-index: 200;
 }
@@ -27,7 +27,7 @@
   min-height: 100px;
   min-width: 300px;
   display: flex;
-  flex-grow: 0px;
+  flex-grow: 0;
   background-color: #fff;
   flex-direction: column;
   position: relative;
