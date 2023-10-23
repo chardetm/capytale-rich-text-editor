@@ -52,7 +52,9 @@ import {
   $getRoot,
   $getSelection,
   $isElementNode,
-  $isRangeSelection,
+  $isRangeSelection, // Math
+  LexicalNode,       // Math
+  $isNodeSelection,
   $isRootOrShadowRoot,
   $isTextNode,
   CAN_REDO_COMMAND,
@@ -83,7 +85,6 @@ import { getSelectedNode } from "../../utils/getSelectedNode";
 import { sanitizeUrl } from "../../utils/url";
 import { EmbedConfigs } from "../AutoEmbedPlugin";
 import { INSERT_COLLAPSIBLE_COMMAND } from "../CollapsiblePlugin";
-import { InsertEquationDialog } from "../EquationsPlugin";
 import {
   INSERT_IMAGE_COMMAND,
   InsertImageDialog,
@@ -91,6 +92,15 @@ import {
 } from "../ImagesPlugin";
 import InsertLayoutDialog from "../LayoutPlugin/InsertLayoutDialog";
 import { InsertNewTableDialog, InsertTableDialog } from "../TablePlugin";
+
+// Math
+import { MathNode } from "../../nodes/MathNode";
+import { INSERT_MATH_COMMAND } from "../MathPlugin";
+import { $isMathNode } from '../../nodes/MathNode';
+import {
+  $patchStyle,
+} from "../../utils/mathUtils";
+import MathTools from "./tools/MathTools";
 
 const blockTypeToBlockName = {
   bullet: "Liste à puces",
@@ -105,6 +115,7 @@ const blockTypeToBlockName = {
   number: "Liste numérotée",
   paragraph: "Paragraphe",
   quote: "Citation",
+  math: "Formule mathématique",
 };
 
 const rootTypeToRootName = {
@@ -133,6 +144,7 @@ const FONT_FAMILY_OPTIONS: [string, string][] = [
   ["Times New Roman", "Times New Roman"],
   ["Trebuchet MS", "Trebuchet MS"],
   ["Verdana", "Verdana"],
+  ["KaTeX_Main", "Maths (KaTeX)"],
 ];
 
 const FONT_SIZE_OPTIONS: [string | null, string][] = [
@@ -149,41 +161,41 @@ const FONT_SIZE_OPTIONS: [string | null, string][] = [
 ];
 
 const ELEMENT_FORMAT_OPTIONS: {
-    [key in Exclude<ElementFormatType, ''>]: {
-        icon: string;
-        iconRTL: string;
-        name: string;
-      };
+  [key in Exclude<ElementFormatType, "">]: {
+    icon: string;
+    iconRTL: string;
+    name: string;
+  };
 } = {
   center: {
     icon: "center-align",
-    iconRTL: 'center-align',
+    iconRTL: "center-align",
     name: "Centré",
   },
   end: {
-    icon: 'right-align',
-    iconRTL: 'left-align',
-    name: 'À la fin',
+    icon: "right-align",
+    iconRTL: "left-align",
+    name: "À la fin",
   },
   justify: {
     icon: "justify-align",
-    iconRTL: 'justify-align',
+    iconRTL: "justify-align",
     name: "Justifié",
   },
   left: {
     icon: "left-align",
-    iconRTL: 'left-align',
+    iconRTL: "left-align",
     name: "À gauche",
   },
   right: {
     icon: "right-align",
-    iconRTL: 'right-align',
+    iconRTL: "right-align",
     name: "À droite",
   },
   start: {
-    icon: 'left-align',
-    iconRTL: 'right-align',
-    name: 'Au début',
+    icon: "left-align",
+    iconRTL: "right-align",
+    name: "Au début",
   },
 };
 
@@ -417,7 +429,9 @@ function FontDropDown({
       buttonClassName={"toolbar-item " + style}
       buttonLabel={name}
       buttonIconClassName={
-        style === "font-family" ? "icon block-type font-family" : "icon block-type font-size"
+        style === "font-family"
+          ? "icon block-type font-family"
+          : "icon block-type font-size"
       }
       buttonAriaLabel={buttonAriaLabel}
     >
@@ -454,7 +468,7 @@ function ElementFormatDropdown({
   isRTL: boolean;
   disabled: boolean;
 }) {
-  const formatOption = ELEMENT_FORMAT_OPTIONS[value || 'left'];
+  const formatOption = ELEMENT_FORMAT_OPTIONS[value || "left"];
   return (
     <DropDown
       disabled={disabled}
@@ -501,11 +515,13 @@ function ElementFormatDropdown({
         <i className="icon justify-align" />
         <span className="text">Justifier</span>
       </DropDownItem>
-      <Divider /><DropDownItem
+      <Divider />
+      <DropDownItem
         onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'start');
+          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "start");
         }}
-        className="item">
+        className="item"
+      >
         <i
           className={`icon ${
             isRTL
@@ -517,9 +533,10 @@ function ElementFormatDropdown({
       </DropDownItem>
       <DropDownItem
         onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'end');
+          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "end");
         }}
-        className="item">
+        className="item"
+      >
         <i
           className={`icon ${
             isRTL
@@ -572,6 +589,7 @@ export default function ToolbarPlugin({
   const [fontFamily, setFontFamily] = useState<string>("Arial");
   const [elementFormat, setElementFormat] = useState<ElementFormatType>("left");
   const [isLink, setIsLink] = useState(false);
+  const [isMath, setIsMath] = useState(false);
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
   const [isUnderline, setIsUnderline] = useState(false);
@@ -586,9 +604,27 @@ export default function ToolbarPlugin({
   const [codeLanguage, setCodeLanguage] = useState<string>("");
   const [isEditable, setIsEditable] = useState(() => editor.isEditable());
 
+  // Math
+  const [selectedNode, setSelectedNode] = useState<LexicalNode | null>(null);
+
   const $updateToolbar = useCallback(() => {
+    console.log("updateToolbar");
     const selection = $getSelection();
+
+    // Math
+    if ($isNodeSelection(selection)) {
+      const node = selection.getNodes()[0];
+      setSelectedNode(node);
+      setIsMath($isMathNode(node));
+      setSelectedElementKey(null);
+      setBlockType('paragraph');
+    } else {
+      setSelectedNode(null);
+      setIsMath(false);
+    }
+
     if ($isRangeSelection(selection)) {
+        console.log("updateToolbar isRange");
       const anchorNode = selection.anchor.getNode();
       let element =
         anchorNode.getKey() === "root"
@@ -759,6 +795,8 @@ export default function ToolbarPlugin({
           DEPRECATED_$isGridSelection(selection)
         ) {
           $patchStyleText(selection, styles);
+          const mathNodes = selection.getNodes().filter($isMathNode);
+          $patchStyle(mathNodes, styles);
         }
       });
     },
@@ -868,7 +906,7 @@ export default function ToolbarPlugin({
         <i className="format redo" />
       </button>
       <Divider />
-      {blockType in blockTypeToBlockName && activeEditor === editor && (
+      {blockType in blockTypeToBlockName && activeEditor === editor && !isMath && (
         <>
           <BlockFormatDropDown
             disabled={!isEditable}
@@ -879,7 +917,7 @@ export default function ToolbarPlugin({
           <Divider />
         </>
       )}
-      {blockType === "code" ? (
+      {blockType === "code" && (
         <DropDown
           disabled={!isEditable}
           buttonClassName="toolbar-item code-language"
@@ -900,7 +938,17 @@ export default function ToolbarPlugin({
             );
           })}
         </DropDown>
-      ) : (
+      )}
+      {isMath && (
+        <MathTools 
+        bgColor={bgColor}
+        fontColor={fontColor}
+        editor={editor}
+        isEditable={isEditable}
+        node={selectedNode as MathNode}
+        />
+    )}
+    {blockType !== "code" && !isMath && (
         <>
           <FontDropDown
             disabled={!isEditable}
@@ -1137,22 +1185,17 @@ export default function ToolbarPlugin({
               <i className="icon columns" />
               <span className="text">Colonnes...</span>
             </DropDownItem>
-            {/* 
-            <DropDownItem
-              onClick={() => {
-                showModal("Insérer une équation", (onClose) => (
-                  <InsertEquationDialog
-                    activeEditor={activeEditor}
-                    onClose={onClose}
-                  />
-                ));
-              }}
-              className="item"
-            >
-              <i className="icon equation" />
-              <span className="text">Equation</span>
-            </DropDownItem>
-            */}
+            {editor.hasNode(MathNode) && (
+              <DropDownItem
+                onClick={() => {
+                  editor.dispatchCommand(INSERT_MATH_COMMAND, { value: "" });
+                }}
+                className="item"
+              >
+                <i className="icon equation" />
+                <span className="text">Formule mathématique</span>
+              </DropDownItem>
+            )}
             <DropDownItem
               onClick={() => {
                 editor.dispatchCommand(INSERT_COLLAPSIBLE_COMMAND, undefined);

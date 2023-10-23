@@ -33,7 +33,6 @@ import DragDropPaste from "./plugins/DragDropPastePlugin";
 import DraggableBlockPlugin from "./plugins/DraggableBlockPlugin";
 import EmojiPickerPlugin from "./plugins/EmojiPickerPlugin";
 import EmojisPlugin from "./plugins/EmojisPlugin";
-import EquationsPlugin from "./plugins/EquationsPlugin";
 import FloatingLinkEditorPlugin from "./plugins/FloatingLinkEditorPlugin";
 import FloatingTextFormatToolbarPlugin from "./plugins/FloatingTextFormatToolbarPlugin";
 import ImagesPlugin from "./plugins/ImagesPlugin";
@@ -53,6 +52,10 @@ import YouTubePlugin from "./plugins/YouTubePlugin";
 import PlaygroundEditorTheme from "./themes/PlaygroundEditorTheme";
 import ContentEditable from "./ui/ContentEditable";
 import Placeholder from "./ui/Placeholder";
+
+// Maths
+import MathPlugin from "./plugins/MathPlugin";
+import "mathlive/static.css";
 
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { EditorState, LexicalEditor } from "lexical";
@@ -230,11 +233,11 @@ const Editor = ({
           <YouTubePlugin />
           {isEditable && <FloatingTextFormatToolbarPlugin />}
           <HorizontalRulePlugin />
-          <EquationsPlugin />
           <TabFocusPlugin />
           <TabIndentationPlugin />
           <CollapsiblePlugin />
           <LayoutPlugin />
+          <MathPlugin />
           {isEditable && (
             <FloatingLinkEditorPlugin
               isLinkEditMode={isLinkEditMode}

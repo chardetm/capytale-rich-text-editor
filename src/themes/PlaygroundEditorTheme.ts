@@ -113,6 +113,9 @@ const theme: EditorThemeClasses = {
     underline: 'PlaygroundEditorTheme__textUnderline',
     underlineStrikethrough: 'PlaygroundEditorTheme__textUnderlineStrikethrough',
   },
+
+  // Math
+  math: 'PlaygroundEditorTheme__math',
 };
 
 export default theme;

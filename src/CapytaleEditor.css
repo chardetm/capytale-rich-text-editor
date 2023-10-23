@@ -43,8 +43,7 @@
 .link-editor,
 .link-editor *,
 Modal__overlay,
-Modal__overlay *
-{
+Modal__overlay * {
   box-sizing: content-box;
 }
 
@@ -68,4 +67,8 @@ Modal__overlay *
 
 .color-picker-basic-color > button {
   padding: 0;
+}
+
+.crte-ibuttontext {
+  margin-left: 8px;
 }

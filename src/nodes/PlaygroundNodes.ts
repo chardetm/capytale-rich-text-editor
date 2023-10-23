@@ -22,13 +22,15 @@ import {CollapsibleContainerNode} from '../plugins/CollapsiblePlugin/Collapsible
 import {CollapsibleContentNode} from '../plugins/CollapsiblePlugin/CollapsibleContentNode';
 import {CollapsibleTitleNode} from '../plugins/CollapsiblePlugin/CollapsibleTitleNode';
 import {EmojiNode} from './EmojiNode';
-import {EquationNode} from './EquationNode';
 import {ImageNode} from './ImageNode';
 import {KeywordNode} from './KeywordNode';
 import {LayoutContainerNode} from './LayoutContainerNode';
 import {LayoutItemNode} from './LayoutItemNode';
 import {TableNode as NewTableNode} from './TableNode';
 import {YouTubeNode} from './YouTubeNode';
+
+// Math
+import { MathNode } from "./MathNode";
 
 const PlaygroundNodes: Array<Klass<LexicalNode>> = [
   HeadingNode,
@@ -47,7 +49,6 @@ const PlaygroundNodes: Array<Klass<LexicalNode>> = [
   OverflowNode,
   ImageNode,
   EmojiNode,
-  EquationNode,
   KeywordNode,
   HorizontalRuleNode,
   YouTubeNode,
@@ -57,6 +58,7 @@ const PlaygroundNodes: Array<Klass<LexicalNode>> = [
   CollapsibleTitleNode,
   LayoutContainerNode,
   LayoutItemNode,
+  MathNode,
 ];
 
 export default PlaygroundNodes;
