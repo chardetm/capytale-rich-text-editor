@@ -1,7 +1,7 @@
 {
   "name": "@capytale/capytale-rich-text-editor",
   "author": "Maverick Chardet",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "type": "module",
   "main": "dist/capytale-rich-text-editor.umd.cjs",
   "module": "dist/capytale-rich-text-editor.js",
