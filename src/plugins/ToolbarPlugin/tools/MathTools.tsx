@@ -162,6 +162,7 @@ export default function MathTools({
 
   return (
     <>
+      {/*
       <button
         onClick={openWolfram}
         className={"toolbar-item spaced"}
@@ -172,6 +173,7 @@ export default function MathTools({
         <i className="format wolfram" />
         <span className="crte-ibuttontext">Wolfram</span>
       </button>
+      */}
       <button
         disabled={!isEditable}
         onClick={openEditDialog}
