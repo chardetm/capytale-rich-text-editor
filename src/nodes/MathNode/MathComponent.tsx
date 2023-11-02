@@ -88,7 +88,7 @@ export default function MathComponent({ initialValue, nodeKey, mathfieldRef: ref
     const mathfield = ref.current;
     if (!mathfield) return;
 
-    mathfield.smartMode = true;
+    mathfield.smartMode = false;
     mathfield.mathModeSpace = "\\,";
 
     // focus newly created mathfield
