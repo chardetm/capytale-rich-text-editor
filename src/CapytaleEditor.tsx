@@ -151,7 +151,7 @@ const CapytaleEditor: React.FC<ICapytaleEditorProps> = ({
   sizeCheckInterval = 2000,
   initialEditorState,
   htmlInitialContent,
-}): React.ReactElement => {
+}) => {
   if (htmlInitialContent) {
     initialEditorState = null;
   }
