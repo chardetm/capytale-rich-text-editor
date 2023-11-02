@@ -26,7 +26,7 @@ export interface ICapytaleEditorContentProps {
   htmlInitialContent?: string;
 }
 
-const CapytaleEditorContent: React.FC<ICapytaleEditorContentProps> = ({
+function CapytaleEditorContent({
   isEditable,
   useLexicalContextMenu,
   onChange,
@@ -40,7 +40,7 @@ const CapytaleEditorContent: React.FC<ICapytaleEditorContentProps> = ({
   jsonSizeLimit,
   sizeCheckInterval,
   htmlInitialContent,
-}) => {
+}: ICapytaleEditorContentProps) {
   const [initialized, setInitialized] = React.useState(false);
   const [editor] = useLexicalComposerContext();
   useEffect(() => {
@@ -125,7 +125,7 @@ const CapytaleEditorContent: React.FC<ICapytaleEditorContentProps> = ({
       />
     </div>
   );
-};
+}
 
 export interface ICapytaleEditorProps {
   isEditable?: boolean;
@@ -140,7 +140,7 @@ export interface ICapytaleEditorProps {
   htmlInitialContent?: string;
 }
 
-const CapytaleEditor: React.FC<ICapytaleEditorProps> = ({
+function CapytaleEditor({
   isEditable = true,
   useLexicalContextMenu = false,
   onChange,
@@ -151,7 +151,7 @@ const CapytaleEditor: React.FC<ICapytaleEditorProps> = ({
   sizeCheckInterval = 2000,
   initialEditorState,
   htmlInitialContent,
-}) => {
+}: ICapytaleEditorProps) {
   if (htmlInitialContent) {
     initialEditorState = null;
   }
@@ -170,6 +170,6 @@ const CapytaleEditor: React.FC<ICapytaleEditorProps> = ({
       />
     </EditorComposer>
   );
-};
+}
 
 export default CapytaleEditor;
