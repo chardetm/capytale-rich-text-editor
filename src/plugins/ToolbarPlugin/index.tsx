@@ -53,7 +53,7 @@ import {
   $getSelection,
   $isElementNode,
   $isRangeSelection, // Math
-  LexicalNode,       // Math
+  LexicalNode, // Math
   $isNodeSelection,
   $isRootOrShadowRoot,
   $isTextNode,
@@ -96,10 +96,8 @@ import { InsertNewTableDialog, InsertTableDialog } from "../TablePlugin";
 // Math
 import { MathNode } from "../../nodes/MathNode";
 import { INSERT_MATH_COMMAND } from "../MathPlugin";
-import { $isMathNode } from '../../nodes/MathNode';
-import {
-  $patchStyle,
-} from "../../utils/mathUtils";
+import { $isMathNode } from "../../nodes/MathNode";
+import { $patchStyle } from "../../utils/mathUtils";
 import MathTools from "./tools/MathTools";
 
 const blockTypeToBlockName = {
@@ -608,7 +606,6 @@ export default function ToolbarPlugin({
   const [selectedNode, setSelectedNode] = useState<LexicalNode | null>(null);
 
   const $updateToolbar = useCallback(() => {
-    console.log("updateToolbar");
     const selection = $getSelection();
 
     // Math
@@ -617,14 +614,13 @@ export default function ToolbarPlugin({
       setSelectedNode(node);
       setIsMath($isMathNode(node));
       setSelectedElementKey(null);
-      setBlockType('paragraph');
+      setBlockType("paragraph");
     } else {
       setSelectedNode(null);
       setIsMath(false);
     }
 
     if ($isRangeSelection(selection)) {
-        console.log("updateToolbar isRange");
       const anchorNode = selection.anchor.getNode();
       let element =
         anchorNode.getKey() === "root"
@@ -906,17 +902,19 @@ export default function ToolbarPlugin({
         <i className="format redo" />
       </button>
       <Divider />
-      {blockType in blockTypeToBlockName && activeEditor === editor && !isMath && (
-        <>
-          <BlockFormatDropDown
-            disabled={!isEditable}
-            blockType={blockType}
-            rootType={rootType}
-            editor={editor}
-          />
-          <Divider />
-        </>
-      )}
+      {blockType in blockTypeToBlockName &&
+        activeEditor === editor &&
+        !isMath && (
+          <>
+            <BlockFormatDropDown
+              disabled={!isEditable}
+              blockType={blockType}
+              rootType={rootType}
+              editor={editor}
+            />
+            <Divider />
+          </>
+        )}
       {blockType === "code" && (
         <DropDown
           disabled={!isEditable}
@@ -940,15 +938,15 @@ export default function ToolbarPlugin({
         </DropDown>
       )}
       {isMath && (
-        <MathTools 
-        bgColor={bgColor}
-        fontColor={fontColor}
-        editor={editor}
-        isEditable={isEditable}
-        node={selectedNode as MathNode}
+        <MathTools
+          bgColor={bgColor}
+          fontColor={fontColor}
+          editor={editor}
+          isEditable={isEditable}
+          node={selectedNode as MathNode}
         />
-    )}
-    {blockType !== "code" && !isMath && (
+      )}
+      {blockType !== "code" && !isMath && (
         <>
           <FontDropDown
             disabled={!isEditable}
