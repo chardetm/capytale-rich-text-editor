@@ -33,6 +33,7 @@
 .editor {
   --add-paragraph-height: 16px;
   font-family: Arial, Helvetica, sans-serif;
+  max-width: 100%;
 }
 
 .editor-inner *,

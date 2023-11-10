@@ -106,6 +106,8 @@
   overflow-x: auto;
   position: relative;
   tab-size: 2;
+  white-space: pre;
+  color: black;
 }
 .PlaygroundEditorTheme__code:before {
   content: attr(data-gutter);
