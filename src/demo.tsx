@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 
+import exampleState from "./exampleState.json";
+
 import {
     CapytaleRichTextEditor,
     CapytaleRichTextEditorContext,
@@ -52,7 +54,8 @@ function App() {
           <CapytaleRichTextEditor
             onJsonChange={onChange}
             isEditable={true}
-            htmlInitialContent="<h1>Test</h1><p>Voici un <a href='https://google.fr/'>lien vers Google</a>.</p>"
+            initialEditorState={JSON.stringify(exampleState)}
+            //htmlInitialContent="<h1>Test</h1><p>Voici un <a href='https://google.fr/'>lien vers Google</a>.</p>"
           />
         </div>
         <div id="output">
