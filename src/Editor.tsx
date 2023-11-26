@@ -111,7 +111,7 @@ const Editor = ({
       editorContext.setGetState(() => {
         return (needJson: boolean = true, needHtml: boolean = true) => {
           return new Promise((resolve, reject) => {
-            editor.update(() => {
+            editor.getEditorState().read(() => {
               const html = needHtml ? $generateHtmlFromNodes(editor) : null;
               const json = needJson
                 ? JSON.stringify(editor.getEditorState())

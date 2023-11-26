@@ -54,6 +54,7 @@ function App() {
           <CapytaleRichTextEditor
             onJsonChange={onChange}
             isEditable={true}
+            jsonSizeLimit={10000000}
             initialEditorState={JSON.stringify(exampleState)}
             //htmlInitialContent="<h1>Test</h1><p>Voici un <a href='https://google.fr/'>lien vers Google</a>.</p>"
           />
